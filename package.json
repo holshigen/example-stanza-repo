@@ -1,0 +1,13 @@
+{
+  "name": "myaguchi",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": "https://github.com/myaguchi/example-stanza-repo",
+  "dependencies": {
+    "togostanza": "github:togostanza/togostanza"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "private": true
+}
