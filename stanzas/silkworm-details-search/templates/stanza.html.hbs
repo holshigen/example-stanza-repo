@@ -29,14 +29,6 @@
 			<td>{{{information.description}}}</td>
 		</tr>
 		<tr>
-			<th class="sub-title">RRC</th>
-			<td>{{{information.rrc}}}</td>
-		</tr>
-		<tr>
-			<th class="sub-title">HomePage</th>
-			<td><a href="{{information.homepage}}">{{information.homepage}}</a></td>
-		</tr>
-		<tr>
 			<th class="sub-title">Reference</th>
 			<td>
 				{{/each}}
@@ -46,6 +38,14 @@
 				{{/each}}
 				{{#each information as |information|}}
 			</td>
+		</tr>
+		<tr>
+			<th class="sub-title">RRC</th>
+			<td>{{{information.rrc}}}</td>
+		</tr>
+		<tr>
+			<th class="sub-title">HomePage</th>
+			<td><a href="{{information.homepage}}">{{information.homepage}}</a></td>
 		</tr>
 	</table>
 	{{else}}
