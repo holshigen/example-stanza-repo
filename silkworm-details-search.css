@@ -13,9 +13,32 @@ main {
   padding: 1rem 2rem;
 }
 
-p.greeting {
-  margin: 0;
-  font-size: 24px;
-  color: var(--greeting-color);
-  text-align: var(--greeting-align);
+.sub-title {
+  width: 12%;
+}
+
+.table-information {
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.table-egg {
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.table-larva {
+  table-layout: fixed;
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.table-pupa {
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.table-adult {
+  width: 100%;
+  overflow-wrap: anywhere;
 }

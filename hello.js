@@ -1,4 +1,4 @@
-import { S as Stanza, d as defineStanzaElement } from './stanza-4d5e4756.js';
+import { S as Stanza, d as defineStanzaElement } from './stanza-2ddafdb3.js';
 
 class Hello extends Stanza {
   async render() {

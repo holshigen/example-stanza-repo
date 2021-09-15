@@ -12177,5 +12177,5 @@ class Stanza {
   }
 }
 
-export { Stanza as S, defineStanzaElement as d };
-//# sourceMappingURL=stanza-4d5e4756.js.map
+export { Stanza as S, commonjsGlobal as c, defineStanzaElement as d };
+//# sourceMappingURL=stanza-2ddafdb3.js.map
