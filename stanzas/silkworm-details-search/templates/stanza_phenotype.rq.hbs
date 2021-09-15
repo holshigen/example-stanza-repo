@@ -1,0 +1,76 @@
+PREFIX brso: <http://purl.jp/bio/10/brso/>
+PREFIX sio: <http://semanticscience.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX so: <http://purl.obolibrary.org/obo/so#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX faldo: <http://biohackathon.org/resource/faldo#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>
+
+
+SELECT distinct
+	?label
+	?bmpo
+	?dpo
+	(group_concat(distinct ?reference;separator = "<br/>") AS ?reference)
+WHERE {
+	SELECT distinct
+		?label
+		(group_concat(distinct ?bmpo;separator = "<br/>") AS ?bmpo)
+		(group_concat(distinct ?dpo;separator = "<br/>") AS ?dpo)
+		(concat(
+			group_concat(distinct ?author_name;separator = ", ") ,
+			" (",
+			?date,
+			"). ",
+			?puclication_name,
+			", ",
+			?volume,
+			", ",
+			?number,
+			", ",
+			?starting_page,
+			"-",
+			?ending_page,
+			". ",
+			?url
+			) AS ?reference)
+	WHERE {
+		?Resource dcterms:identifier "{{id}}" ;
+			sio:SIO_001279 _:b_phenotype .
+
+		_:b_phenotype a sio:SIO_010056 ;
+			rdfs:label ?label ;
+			dcterms:reference _:b_reference .
+		filter(LANG(?label) = '')
+
+		_:b_reference a bibo:Article ;
+			prism:publicationName ?puclication_name ;
+			prism:volume ?volume ;
+			prism:number ?number ;
+			prism:startingPage ?starting_page ;
+			prism:endingPage ?ending_page ;
+			dcterms:date ?date ;
+			rdfs:seeAlso ?url .
+		filter(LANG(?puclication_name) = '{{language}}')
+
+		OPTIONAL{
+			_:b_phenotype sio:SIO_000255 ?bmpo.
+		}
+		OPTIONAL{
+			_:b_phenotype rdfs:seeAlso ?dpo.
+		}
+
+		OPTIONAL {
+			_:b_reference dc:creater ?author .
+			?author a foaf:Person ;
+				foaf:name ?author_name .
+			filter(LANG(?author_name) = '{{language}}')
+		}
+	}
+}

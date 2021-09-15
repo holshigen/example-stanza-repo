@@ -16,11 +16,18 @@
   "stanza:updated": "2021-09-09",
   "stanza:parameter": [
     {
-      "stanza:key": "say-to",
+      "stanza:key": "id",
       "stanza:type": "string",
-      "stanza:example": "world",
-      "stanza:description": "who to say hello to",
-      "stanza:required": false
+      "stanza:example": "k32",
+      "stanza:description": "Strain ID",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "language",
+      "stanza:type": "string",
+      "stanza:example": "en",
+      "stanza:description": "Language",
+      "stanza:required": true
     }
   ],
   "stanza:menu-placement": "bottom-right",

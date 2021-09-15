@@ -1,0 +1,38 @@
+PREFIX brso: <http://purl.jp/bio/10/brso/>
+PREFIX sio: <http://semanticscience.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX so: <http://purl.obolibrary.org/obo/so#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX faldo: <http://biohackathon.org/resource/faldo#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>
+
+
+SELECT distinct
+	?id
+	?name
+	(group_concat(distinct ?synonym;separator = ", ") AS ?synonym)
+	(group_concat(distinct ?url;separator = "<br/>") AS ?url)
+FROM <http://iruddat2.nig.ac.jp:8120/silkworm>
+WHERE {
+	?Resource dcterms:identifier "{{id}}" ;
+		brso:genomic_feature _:b_genomic_feature .
+
+	_:b_genomic_feature a brso:GenomicFeature ;
+		brso:has_genomic_segment _:b_genomic_segment .
+
+	_:b_genomic_segment a brso:GenomicSegment ;
+		dcterms:identifier ?id ;
+		skos:altLabel ?synonym ;
+		rdfs:seeAlso ?url .
+
+	OPTIONAL{
+		_:b_genomic_segment rdfs:label ?name.
+	}
+}
+

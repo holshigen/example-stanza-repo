@@ -1,0 +1,43 @@
+PREFIX brso: <http://purl.jp/bio/10/brso/>
+PREFIX sio: <http://semanticscience.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX so: <http://purl.obolibrary.org/obo/so#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX faldo: <http://biohackathon.org/resource/faldo#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+
+
+SELECT distinct
+	"{{id}}" as ?id
+	?strain
+	?taxonomy_id
+	?description
+	(group_concat(distinct ?origin;separator = ", ") AS ?origin)
+	(group_concat(distinct ?rrc;separator = "\n") AS ?rrc)
+	?homepage
+FROM <http://iruddat2.nig.ac.jp:8120/silkworm>
+WHERE {
+	?Resource a brso:BiologicalResource ;
+		dcterms:identifier "{{id}}" ;
+		rdfs:label ?strain ;
+		brso:organism _:b_organism ;
+		dcterms:description ?description ;
+		foaf:homepage ?homepage .
+	filter(LANG(?description) = '{{language}}')
+
+	_:b_organism a sio:SIO_010000 ;
+		obo:RO_0002162 ?taxonomy_id .
+
+	OPTIONAL {
+		?Resource brso:derived_from ?origin .
+	}
+	OPTIONAL {
+		?Resource dcterms:isReferencedBy ?rrc .
+	}
+}
+LIMIT 1

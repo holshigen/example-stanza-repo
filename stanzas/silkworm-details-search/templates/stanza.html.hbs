@@ -1,1 +1,396 @@
-<p class="greeting">{{greeting}}</p>
+<style>
+@import url('https://rcshige3.nig.ac.jp/rdf/css/bootstrap.min.css');
+</style>
+
+<div class="table-responsive">
+
+	<!--
+		系統リソース情報
+	-->
+	{{#each information as |information|}}
+	<table class="table table-sm table-striped table-bordered table-information">
+		<thead class="thead-dark">
+			<th colspan="8"><h4>Information</h4></th>
+		</thead>
+		<tr>
+			<th colspan="1" class="sub-title">Strain</th>
+			<td colspan="7">{{information.strain}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Taxonomy ID</th>
+			<td colspan="7"><a href="{{information.taxonomy_id}}">{{information.taxonomy_id}}</a></td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Origin</th>
+			<td colspan="7">{{information.origin}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Description</th>
+			<td colspan="7">{{{information.description}}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">RRC</th>
+			<td colspan="7">{{{information.rrc}}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">HomePage</th>
+			<td colspan="7"><a href="{{information.homepage}}">{{information.homepage}}</a></td>
+		</tr>
+	{{/each}}
+	{{#if reference}}
+		<thead class="thead-dark">
+			<th colspan="8">Reference</th>
+		</thead>
+		<tr>
+			<th>Author</th>
+			<th>Date</th>
+			<th>Puclication Name</th>
+			<th>Volume</th>
+			<th>Number</th>
+			<th>Starting Page</th>
+			<th>Ending Page</th>
+			<th>URL</th>
+		</tr>
+		{{#each reference as |reference|}}
+		<tr>
+			<td>{{reference.author_name}}</td>
+			<td>{{reference.date}}</td>
+			<td>{{reference.puclication_name}}</td>
+			<td>{{reference.volume}}</td>
+			<td>{{reference.number}}</td>
+			<td>{{reference.starting_page}}</td>
+			<td>{{reference.ending_page}}</td>
+			<td>{{reference.url}}</td>
+		</tr>
+		{{/each}}
+	{{/if}}
+	{{#each information as |information|}}
+	</table>
+	{{else}}
+	<p>No data found.</p>
+	{{/each}}
+
+	<!--
+		卵リソース情報
+	-->
+	{{#each egg as |egg|}}
+	<table class="table table-sm table-striped table-bordered table-egg">
+		<thead class="thead-dark">
+			<th colspan="4"><h4>Egg</h4></th>
+		</thead>
+		<tr>
+			<th colspan="1" class="sub-title">Resource</th>
+			<td colspan="3">{{egg.name}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Resource State</th>
+			<td colspan="3">{{egg.resource_state}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Image</th>
+			<td colspan="3">
+	{{/each}}
+	{{#if egg_image}}
+		{{#each egg_image as |egg_image|}}
+				<a href="{{egg_image.image}}"><img width="120px" src="{{egg_image.image}}"></a>
+		{{/each}}
+	{{/if}}
+	{{#each egg as |egg|}}
+			</td>
+		</tr>
+	{{/each}}
+	{{#if egg_phenotype}}
+		<thead class="thead-dark">
+			<th colspan=4">Phenotype</th>
+		</thead>
+		<tr>
+			<th>Phenotype</th>
+			<th>BMPO</th>
+			<th>DPO</th>
+			<th>Reference</th>
+		</tr>
+		{{#each egg_phenotype as |egg_phenotype|}}
+		<tr>
+			<td>{{{egg_phenotype.label}}}</td>
+			<td>{{{egg_phenotype.bmpo}}}</td>
+			<td>{{{egg_phenotype.dpo}}}</td>
+			<td>{{{egg_phenotype.reference}}}</td>
+		</tr>
+		{{/each}}
+	{{/if}}
+	{{#if egg_gene}}
+		<thead class="thead-dark">
+			<th colspan=4">Gene</th><
+		/thead>
+		<tr>
+			<th>Gene ID</th>
+			<th>Name</th>
+			<th>Synonym</th>
+			<th>URL</th>
+		</tr>
+		{{#each egg_gene as |egg_gene|}}
+		<tr>
+			<td>{{egg_gene.id}}</td>
+			<td>{{egg_gene.name}}</td>
+			<td>{{egg_gene.synonym}}</td>
+			<td>{{{egg_gene.url}}}</td>
+		</tr>
+		{{/each}}
+	{{/if}}
+	{{#each egg as |egg|}}
+	</table>
+	{{/each}}
+
+	<!--
+		幼虫リソース情報
+	-->
+	{{#each larva as |larva|}}
+	<table class="table table-sm table-striped table-bordered table-larva">
+		<thead class="thead-dark">
+			<th colspan="9"><h4>Larva</h4></th>
+		</thead>
+		<tr>
+			<th colspan="1" class="sub-title">Resource</th>
+			<td colspan="8">{{larva.name}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Resource State</th>
+			<td colspan="8">{{larva.resource_state}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Image</th>
+			<td colspan="8">
+	{{/each}}
+	{{#if larva_image}}
+		{{#each larva_image as |larva_image|}}
+				<a href="{{larva_image.image}}"><img width="120px" src="{{larva_image.image}}"></a>
+		{{/each}}
+	{{/if}}
+	{{#each larva as |larva|}}
+			</td>
+		</tr>
+	{{/each}}
+	{{#if larva_phenotype}}
+		<thead class="thead-dark">
+			<th colspan="9">Phenotype</th>
+		</thead>
+		<tr>
+			<th colspan="1">Phenotype</th>
+			<th colspan="2">BMPO</th>
+			<th colspan="2">DPO</th>
+			<th colspan="4">Reference</th>
+		</tr>
+		{{#each larva_phenotype as |larva_phenotype|}}
+		<tr>
+			<td colspan="1">{{{larva_phenotype.label}}}</td>
+			<td colspan="2">{{{larva_phenotype.bmpo}}}</td>
+			<td colspan="2">{{{larva_phenotype.dpo}}}</td>
+			<td colspan="4">{{{larva_phenotype.reference}}}</td>
+		</tr>
+		{{/each}}
+	{{/if}}
+	{{#if larva_feeding}}
+		<thead class="thead-dark">
+			<th colspan="9">Feeding ability of artificial diets</th>
+		</thead>
+		<tr>
+			<th colspan="3">Feeding ability</th>
+			<th colspan="3">BMPO</th>
+			<th colspan="3">Description</th>
+		</tr>
+		{{#each larva_feeding as |larva_feeding|}}
+		<tr>
+			<td colspan="3">{{{larva_feeding.label}}}</td>
+			<td colspan="3">{{{larva_feeding.bmpo}}}</td>
+			<td colspan="3">{{{larva_feeding.description}}}</td>
+		</tr>
+		{{/each}}
+	{{/if}}
+	{{#each larva as |larva|}}
+		<thead class="thead-dark">
+			<th colspan="9">Larva Period : {{larva.larva_period}} (hour)</th>
+		</thead>
+		<tr>
+			<th>1st instar</th>
+			<th>1st diapause</th>
+			<th>2nd instar</th>
+			<th>2nd diapause</th>
+			<th>3th instar</th>
+			<th>3th diapause</th>
+			<th>4th instar</th>
+			<th>4th diapause</th>
+			<th>5th instar</th>
+		</tr>
+		<tr>
+			<td>{{larva.1st_instar}}</td>
+			<td>{{larva.1st_diapause}}</td>
+			<td>{{larva.2nd_instar}}</td>
+			<td>{{larva.2nd_diapause}}</td>
+			<td>{{larva.3th_instar}}</td>
+			<td>{{larva.3th_diapause}}</td>
+			<td>{{larva.4th_instar}}</td>
+			<td>{{larva.4th_diapause}}</td>
+			<td>{{larva.5th_instar}}</td>
+		</tr>
+	{{/each}}
+	{{#if larva_gene}}
+		<thead class="thead-dark">
+			<th colspan=9">Gene</th>
+		</thead>
+		<tr>
+			<th colspan="1">Gene ID</th>
+			<th colspan="2">Name</th>
+			<th colspan="2">Synonym</th>
+			<th colspan="4">URL</th>
+		</tr>
+		{{#each larva_gene as |larva_gene|}}
+		<tr>
+			<td colspan="1">{{larva_gene.id}}</td>
+			<td colspan="2">{{larva_gene.name}}</td>
+			<td colspan="2">{{larva_gene.synonym}}</td>
+			<td colspan="4">{{{larva_gene.url}}}</td>
+		</tr>
+		{{/each}}
+	{{/if}}
+	{{#each larva as |larva|}}
+	</table>
+	{{/each}}
+
+	<!--
+		蛹リソース情報
+	-->
+	{{#each pupa as |pupa|}}
+	<table class="table table-sm table-striped table-bordered table-pupa">
+		<thead class="thead-dark">
+			<th colspan="4"><h4>Pupa</h4></th>
+		</thead>
+		<tr>
+			<th colspan="1" class="sub-title">Resource</th>
+			<td colspan="3">{{pupa.name}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Resource State</th>
+			<td colspan="3">{{pupa.resource_state}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Image</th>
+			<td colspan="3">
+	{{/each}}
+	{{#if pupa_image}}
+		{{#each pupa_image as |pupa_image|}}
+				<a href="{{pupa_image.image}}"><img width="120px" src="{{pupa_image.image}}"></a>
+		{{/each}}
+	{{/if}}
+	{{#each pupa as |pupa|}}
+			</td>
+		</tr>
+	{{/each}}
+	{{#if pupa_phenotype}}
+		<thead class="thead-dark">
+			<th colspan=4">Phenotype</th>
+		</thead>
+		<tr>
+			<th colspan="1">Phenotype</th>
+			<th colspan="2">BMPO</th>
+			<th colspan="1">DPO</th>
+		</tr>
+		{{#each pupa_phenotype as |pupa_phenotype|}}
+		<tr>
+			<td colspan="1">{{{pupa_phenotype.label}}}</td>
+			<td colspan="2">{{{pupa_phenotype.bmpo}}}</td>
+			<td colspan="1">{{{pupa_phenotype.dpo}}}</td>
+		</tr>
+		{{/each}}
+	{{/if}}
+	{{#if pupa_gene}}
+		<thead class="thead-dark">
+			<th colspan=4">Gene</th>
+		</thead>
+		<tr>
+			<th>Gene ID</th>
+			<th>Name</th>
+			<th>Synonym</th>
+			<th>URL</th>
+		</tr>
+		{{#each pupa_gene as |pupa_gene|}}
+		<tr>
+			<td>{{pupa_gene.id}}</td>
+			<td>{{pupa_gene.name}}</td>
+			<td>{{pupa_gene.synonym}}</td>
+			<td>{{{pupa_gene.url}}}</td>
+		</tr>
+		{{/each}}
+	{{/if}}
+	{{#each pupa as |pupa|}}
+	</table>
+	{{/each}}
+
+	<!--
+		成虫リソース情報
+	-->
+	{{#each adult as |adult|}}
+	<table class="table table-sm table-striped table-bordered table-adult">
+		<thead class="thead-dark">
+			<th colspan="4"><h4>Adult</h4></th>
+		</thead>
+		<tr>
+			<th colspan="1" class="sub-title">Resource</th>
+			<td colspan="3">{{adult.name}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Resource State</th>
+			<td colspan="3">{{adult.resource_state}}</td>
+		</tr>
+		<tr>
+			<th colspan="1" class="sub-title">Image</th>
+			<td colspan="3">
+	{{/each}}
+	{{#if adult_image}}
+		{{#each adult_image as |adult_image|}}
+				<a href="{{adult_image.image}}"><img width="120px" src="{{adult_image.image}}"></a>
+		{{/each}}
+	{{/if}}
+	{{#each adult as |adult|}}
+			</td>
+		</tr>
+	{{/each}}
+	{{#if adult_phenotype}}
+		<thead class="thead-dark">
+			<th colspan=4">Phenotype</th>
+		</thead>
+		<tr>
+			<th colspan="1">Phenotype</th>
+			<th colspan="2">BMPO</th>
+			<th colspan="1">DPO</th>
+		</tr>
+		{{#each adult_phenotype as |adult_phenotype|}}
+		<tr>
+			<td colspan="1">{{{adult_phenotype.label}}}</td>
+			<td colspan="2">{{{adult_phenotype.bmpo}}}</td>
+			<td colspan="1">{{{adult_phenotype.dpo}}}</td>
+		</tr>
+		{{/each}}
+	{{/if}}
+	{{#if adult_gene}}
+		<thead class="thead-dark">
+			<th colspan=4">Gene</th>
+		</thead>
+		<tr>
+			<th>Gene ID</th>
+			<th>Name</th>
+			<th>Synonym</th>
+			<th>URL</th>
+		</tr>
+		{{#each adult_gene as |adult_gene|}}
+		<tr>
+			<td>{{adult_gene.id}}</td>
+			<td>{{adult_gene.name}}</td>
+			<td>{{adult_gene.synonym}}</td>
+			<td>{{{adult_gene.url}}}</td>
+		</tr>
+		{{/each}}
+	{{/if}}
+	{{#each adult as |adult|}}
+	</table>
+	{{/each}}
+</div>
