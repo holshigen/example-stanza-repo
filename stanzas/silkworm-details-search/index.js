@@ -9,7 +9,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  系統リソース情報
 			//***************************************
 			const resultsInformation = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_strain.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}`,
@@ -17,7 +17,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			const resultsReference = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_reference.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}`,
@@ -29,21 +29,21 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  卵リソース情報
 			//***************************************
 			const resultsEgg = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_egg.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
 				},
 			});
 			const resultsEggImage = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
 				},
 			});
 			const resultsEggPhenotype = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -51,7 +51,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			const resultsEggGene = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -62,21 +62,21 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  幼虫リソース情報
 			//***************************************
 			const resultsLarva = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_larva.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
 				},
 			});
 			const resultsLarvaImage = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
 				},
 			});
 			const resultsLarvaPhenotype = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -84,7 +84,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			const resultsLarvaFeeding = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_feeding_ability.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -92,7 +92,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			const resultsLarvaGene = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -103,21 +103,21 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  蛹リソース情報
 			//***************************************
 			const resultsPupa = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_pupa.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
 			const resultsPupaImage = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
 			const resultsPupaPhenotype = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
@@ -125,7 +125,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			const resultsPupaGene = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
@@ -136,21 +136,21 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  成虫リソース情報
 			//***************************************
 			const resultsAdult = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_adult.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
 			const resultsAdultImage = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
 			const resultsAdultPhenotype = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
@@ -158,7 +158,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			const resultsAdultGene = await this.query({
-				endpoint: 'http://iruddat2.nig.ac.jp:8120/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
