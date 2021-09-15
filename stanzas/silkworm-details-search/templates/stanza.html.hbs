@@ -10,61 +10,43 @@
 	{{#each information as |information|}}
 	<table class="table table-sm table-striped table-bordered table-information">
 		<thead class="thead-dark">
-			<th colspan="8"><h4>Information</h4></th>
+			<th colspan="2"><h4>Information</h4></th>
 		</thead>
 		<tr>
-			<th colspan="1" class="sub-title">Strain</th>
-			<td colspan="7">{{information.strain}}</td>
+			<th class="sub-title">Strain</th>
+			<td>{{information.strain}}</td>
 		</tr>
 		<tr>
-			<th colspan="1" class="sub-title">Taxonomy ID</th>
-			<td colspan="7"><a href="{{information.taxonomy_id}}">{{information.taxonomy_id}}</a></td>
+			<th class="sub-title">Taxonomy ID</th>
+			<td><a href="{{information.taxonomy_id}}">{{information.taxonomy_id}}</a></td>
 		</tr>
 		<tr>
-			<th colspan="1" class="sub-title">Origin</th>
-			<td colspan="7">{{{information.origin}}}</td>
+			<th class="sub-title">Origin</th>
+			<td>{{{information.origin}}}</td>
 		</tr>
 		<tr>
-			<th colspan="1" class="sub-title">Description</th>
-			<td colspan="7">{{{information.description}}}</td>
+			<th class="sub-title">Description</th>
+			<td>{{{information.description}}}</td>
 		</tr>
 		<tr>
-			<th colspan="1" class="sub-title">RRC</th>
-			<td colspan="7">{{{information.rrc}}}</td>
+			<th class="sub-title">RRC</th>
+			<td>{{{information.rrc}}}</td>
 		</tr>
 		<tr>
-			<th colspan="1" class="sub-title">HomePage</th>
-			<td colspan="7"><a href="{{information.homepage}}">{{information.homepage}}</a></td>
+			<th class="sub-title">HomePage</th>
+			<td><a href="{{information.homepage}}">{{information.homepage}}</a></td>
 		</tr>
-	{{/each}}
-	{{#if reference}}
-		<thead class="thead-dark">
-			<th colspan="8">Reference</th>
-		</thead>
 		<tr>
-			<th>Author</th>
-			<th>Date</th>
-			<th>Puclication Name</th>
-			<th>Volume</th>
-			<th>Number</th>
-			<th>Starting Page</th>
-			<th>Ending Page</th>
-			<th>URL</th>
+			<th class="sub-title">Reference</th>
+			<td>
+				{{/each}}
+				{{#each reference as |reference|}}
+					{{reference.author_name}} ({{reference.date}}). {{reference.puclication_name}}, {{reference.volume}}, {{reference.number}}, {{reference.starting_page}}-{{reference.ending_page}}.
+				<a href="{{reference.url}}">{{reference.url}}</a><br/>
+				{{/each}}
+				{{#each information as |information|}}
+			</td>
 		</tr>
-		{{#each reference as |reference|}}
-		<tr>
-			<td>{{reference.author_name}}</td>
-			<td>{{reference.date}}</td>
-			<td>{{reference.puclication_name}}</td>
-			<td>{{reference.volume}}</td>
-			<td>{{reference.number}}</td>
-			<td>{{reference.starting_page}}</td>
-			<td>{{reference.ending_page}}</td>
-			<td>{{reference.url}}</td>
-		</tr>
-		{{/each}}
-	{{/if}}
-	{{#each information as |information|}}
 	</table>
 	{{else}}
 	<p>No data found.</p>
@@ -79,10 +61,6 @@
 			<th colspan="4"><h4>Egg</h4></th>
 		</thead>
 		<tr>
-			<th colspan="1" class="sub-title">Resource</th>
-			<td colspan="3">{{egg.name}}</td>
-		</tr>
-		<tr>
 			<th colspan="1" class="sub-title">Resource State</th>
 			<td colspan="3">{{egg.resource_state}}</td>
 		</tr>
@@ -92,7 +70,7 @@
 	{{/each}}
 	{{#if egg_image}}
 		{{#each egg_image as |egg_image|}}
-				<a href="{{egg_image.image}}"><img width="120px" src="{{egg_image.image}}"></a>
+				<img width="120px" src="{{egg_image.image}}">
 		{{/each}}
 	{{/if}}
 	{{#each egg as |egg|}}
@@ -150,10 +128,6 @@
 			<th colspan="9"><h4>Larva</h4></th>
 		</thead>
 		<tr>
-			<th colspan="1" class="sub-title">Resource</th>
-			<td colspan="8">{{larva.name}}</td>
-		</tr>
-		<tr>
 			<th colspan="1" class="sub-title">Resource State</th>
 			<td colspan="8">{{larva.resource_state}}</td>
 		</tr>
@@ -163,7 +137,7 @@
 	{{/each}}
 	{{#if larva_image}}
 		{{#each larva_image as |larva_image|}}
-				<a href="{{larva_image.image}}"><img width="120px" src="{{larva_image.image}}"></a>
+				<img width="120px" src="{{larva_image.image}}">
 		{{/each}}
 	{{/if}}
 	{{#each larva as |larva|}}
@@ -265,10 +239,6 @@
 			<th colspan="4"><h4>Pupa</h4></th>
 		</thead>
 		<tr>
-			<th colspan="1" class="sub-title">Resource</th>
-			<td colspan="3">{{pupa.name}}</td>
-		</tr>
-		<tr>
 			<th colspan="1" class="sub-title">Resource State</th>
 			<td colspan="3">{{pupa.resource_state}}</td>
 		</tr>
@@ -278,7 +248,7 @@
 	{{/each}}
 	{{#if pupa_image}}
 		{{#each pupa_image as |pupa_image|}}
-				<a href="{{pupa_image.image}}"><img width="120px" src="{{pupa_image.image}}"></a>
+				<img width="120px" src="{{pupa_image.image}}">
 		{{/each}}
 	{{/if}}
 	{{#each pupa as |pupa|}}
@@ -334,10 +304,6 @@
 			<th colspan="4"><h4>Adult</h4></th>
 		</thead>
 		<tr>
-			<th colspan="1" class="sub-title">Resource</th>
-			<td colspan="3">{{adult.name}}</td>
-		</tr>
-		<tr>
 			<th colspan="1" class="sub-title">Resource State</th>
 			<td colspan="3">{{adult.resource_state}}</td>
 		</tr>
@@ -347,7 +313,7 @@
 	{{/each}}
 	{{#if adult_image}}
 		{{#each adult_image as |adult_image|}}
-				<a href="{{adult_image.image}}"><img width="120px" src="{{adult_image.image}}"></a>
+				<img width="120px" src="{{adult_image.image}}">
 		{{/each}}
 	{{/if}}
 	{{#each adult as |adult|}}

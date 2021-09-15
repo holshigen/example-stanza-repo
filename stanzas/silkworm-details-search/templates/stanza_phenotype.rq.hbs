@@ -38,7 +38,11 @@ WHERE {
 			"-",
 			?ending_page,
 			". ",
-			?url
+			"<a href='",
+			?url,
+			"'>",
+			?url,
+			"</a>"
 			) AS ?reference)
 	WHERE {
 		?Resource dcterms:identifier "{{id}}" ;
