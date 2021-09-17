@@ -14277,7 +14277,7 @@ var metadata = {
 	{
 		"stanza:key": "language",
 		"stanza:type": "string",
-		"stanza:example": "en",
+		"stanza:example": "ja",
 		"stanza:description": "Language",
 		"stanza:required": true
 	}
