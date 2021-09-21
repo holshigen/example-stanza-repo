@@ -14044,9 +14044,21 @@ function unwrapValueFromBinding(queryResult) {
   });
 }
 
+/**
+ * jQueryはウェブアプリケーション側のPrimefacesと衝突するため通常はコメントアウトしておく。
+ * Stanza単体で動作させる場合はコメントを外す。
+ */
+//import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
+
 class SilkwormDetailsSearch extends Stanza {
 	async render() {
 		try {
+
+			// ローディング中くるくる表示
+			var dispMsg = "<div class='loadingMsg'>Now loading</div>";
+			if ($(this.root.querySelector("#loading")).length == 0) {
+				$(this.root.querySelector("main")).append("<div id='loading'>" + dispMsg + "</div>");
+			}
 
 			//***************************************
 			//  系統リソース情報
@@ -14237,6 +14249,9 @@ class SilkwormDetailsSearch extends Stanza {
 
 				}
 			});
+
+			// ローディング中くるくる表示削除
+			$(this.root.querySelector("#loading")).remove();
 
 		} catch (e) {
 			console.error(e);
@@ -14808,7 +14823,7 @@ var templates = [
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult_phenotype") : depth0),{"name":"if","hash":{},"fn":container.program(56, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":323,"column":1},"end":{"line":339,"column":8}}})) != null ? stack1 : "")
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult_gene") : depth0),{"name":"if","hash":{},"fn":container.program(59, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":340,"column":1},"end":{"line":358,"column":8}}})) != null ? stack1 : "")
     + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult") : depth0),{"name":"each","hash":{},"fn":container.program(22, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":359,"column":1},"end":{"line":361,"column":10}}})) != null ? stack1 : "")
-    + "</div>";
+    + "</div>\n";
 },"useData":true,"useBlockParams":true}],
 ["stanza_adult.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
