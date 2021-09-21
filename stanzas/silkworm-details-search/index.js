@@ -1,9 +1,20 @@
 import Stanza from 'togostanza/stanza';
 import { unwrapValueFromBinding } from 'togostanza/utils';
+/**
+ * jQueryはウェブアプリケーション側のPrimefacesと衝突するため通常はコメントアウトしておく。
+ * Stanza単体で動作させる場合はコメントを外す。
+ */
+//import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
 
 export default class SilkwormDetailsSearch extends Stanza {
 	async render() {
 		try {
+
+			// ローディング中くるくる表示
+			var dispMsg = "<div class='loadingMsg'>Now loading</div>";
+			if ($(this.root.querySelector("#loading")).length == 0) {
+				$(this.root.querySelector("main")).append("<div id='loading'>" + dispMsg + "</div>");
+			}
 
 			//***************************************
 			//  系統リソース情報
@@ -194,6 +205,9 @@ export default class SilkwormDetailsSearch extends Stanza {
 
 				}
 			});
+
+			// ローディング中くるくる表示削除
+			$(this.root.querySelector("#loading")).remove();
 
 		} catch (e) {
 			console.error(e);
