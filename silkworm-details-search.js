@@ -1,3 +1,5 @@
+import 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
+
 // In the absence of a WeakSet or WeakMap implementation, don't break, but don't cache either.
 function noop$1() {
     var args = [];
@@ -14044,12 +14046,6 @@ function unwrapValueFromBinding(queryResult) {
   });
 }
 
-/**
- * jQueryはウェブアプリケーション側のPrimefacesと衝突するため通常はコメントアウトしておく。
- * Stanza単体で動作させる場合はコメントを外す。
- */
-//import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
-
 class SilkwormDetailsSearch extends Stanza {
 	async render() {
 		try {
@@ -14063,7 +14059,7 @@ class SilkwormDetailsSearch extends Stanza {
 			//***************************************
 			//  系統リソース情報
 			//***************************************
-			const resultsInformation = await this.query({
+			const results1 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_strain.rq.hbs',
 				parameters: {
@@ -14071,7 +14067,9 @@ class SilkwormDetailsSearch extends Stanza {
 					language: `${this.params['language']}`,
 				},
 			});
-			const resultsReference = await this.query({
+			const resultsInformation = unwrapValueFromBinding(results1);
+
+			const results2 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_reference.rq.hbs',
 				parameters: {
@@ -14079,25 +14077,30 @@ class SilkwormDetailsSearch extends Stanza {
 					language: `${this.params['language']}`,
 				},
 			});
+			const resultsReference = unwrapValueFromBinding(results2);
 
 			//***************************************
 			//  卵リソース情報
 			//***************************************
-			const resultsEgg = await this.query({
+			const results3 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_egg.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
 				},
 			});
-			const resultsEggImage = await this.query({
+			const resultsEgg = unwrapValueFromBinding(results3);
+
+			const results4 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
 				},
 			});
-			const resultsEggPhenotype = await this.query({
+			const resultsEggImage = unwrapValueFromBinding(results4);
+
+			let results5 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
@@ -14105,32 +14108,65 @@ class SilkwormDetailsSearch extends Stanza {
 					language: `${this.params['language']}`,
 				},
 			});
-			const resultsEggGene = await this.query({
+			let resultsEggPhenotype = unwrapValueFromBinding(results5);
+			if (resultsEggPhenotype.length != 0) {
+				resultsEggPhenotype.forEach(p => {
+					let linkedUrls = "";
+					let urls = p.bmpo.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					p.bmpo = linkedUrls;
+					linkedUrls = "";
+					urls = p.dpo.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					p.dpo = linkedUrls;
+				});
+			}
+
+			let results6 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
 				},
 			});
+			let resultsEggGene = unwrapValueFromBinding(results6);
+			if (resultsEggGene.length != 0) {
+				resultsEggGene.forEach(g => {
+					let linkedUrls = "";
+					let urls = g.url.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					g.url = linkedUrls;
+				});
+			}
 
 			//***************************************
 			//  幼虫リソース情報
 			//***************************************
-			const resultsLarva = await this.query({
+			const results7 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_larva.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
 				},
 			});
-			const resultsLarvaImage = await this.query({
+			const resultsLarva = unwrapValueFromBinding(results7);
+
+			const results8 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
 				},
 			});
-			const resultsLarvaPhenotype = await this.query({
+			const resultsLarvaImage = unwrapValueFromBinding(results8);
+
+			let results9 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
@@ -14138,7 +14174,25 @@ class SilkwormDetailsSearch extends Stanza {
 					language: `${this.params['language']}`,
 				},
 			});
-			const resultsLarvaFeeding = await this.query({
+			let resultsLarvaPhenotype = unwrapValueFromBinding(results9);
+			if (resultsLarvaPhenotype.length != 0) {
+				resultsLarvaPhenotype.forEach(p => {
+					let linkedUrls = "";
+					let urls = p.bmpo.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					p.bmpo = linkedUrls;
+					linkedUrls = "";
+					urls = p.dpo.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					p.dpo = linkedUrls;
+				});
+			}
+
+			let results10 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_feeding_ability.rq.hbs',
 				parameters: {
@@ -14146,32 +14200,59 @@ class SilkwormDetailsSearch extends Stanza {
 					language: `${this.params['language']}`,
 				},
 			});
-			const resultsLarvaGene = await this.query({
+			let resultsLarvaFeeding = unwrapValueFromBinding(results10);
+			if (resultsLarvaFeeding.lengh != 0) {
+				resultsLarvaFeeding.forEach(f => {
+					let linkedUrls = "";
+					let urls = f.bmpo.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					f.bmpo = linkedUrls;
+				});
+			}
+
+			let results11 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
 				},
 			});
+			let resultsLarvaGene = unwrapValueFromBinding(results11);
+			if (resultsLarvaGene.length != 0) {
+				resultsLarvaGene.forEach(g => {
+					let linkedUrls = "";
+					let urls = g.url.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					g.url = linkedUrls;
+				});
+			}
 
 			//***************************************
 			//  蛹リソース情報
 			//***************************************
-			const resultsPupa = await this.query({
+			const results12 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_pupa.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
-			const resultsPupaImage = await this.query({
+			const resultsPupa = unwrapValueFromBinding(results12);
+
+			const results13 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
-			const resultsPupaPhenotype = await this.query({
+			const resultsPupaImage = unwrapValueFromBinding(results13);
+
+			let results14 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
@@ -14179,32 +14260,65 @@ class SilkwormDetailsSearch extends Stanza {
 					language: `${this.params['language']}`,
 				},
 			});
-			const resultsPupaGene = await this.query({
+			let resultsPupaPhenotype = unwrapValueFromBinding(results14);
+            if (resultsPupaPhenotype.length != 0) {
+                resultsPupaPhenotype.forEach(p => {
+                    let linkedUrls = "";
+                    let urls = p.bmpo.split("<br/>");
+                    urls.forEach(url => {
+                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+                    });
+                    p.bmpo = linkedUrls;
+                    linkedUrls = "";
+                    urls = p.dpo.split("<br/>");
+                    urls.forEach(url => {
+                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+                    });
+                    p.dpo = linkedUrls;
+                });
+            }
+
+			let results15 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
+			let resultsPupaGene = unwrapValueFromBinding(results15);
+            if (resultsPupaGene.length != 0) {
+                resultsPupaGene.forEach(g => {
+                    let linkedUrls = "";
+                    let urls = g.url.split("<br/>");
+                    urls.forEach(url => {
+                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+                    });
+                    g.url = linkedUrls;
+                });
+            }
 
 			//***************************************
 			//  成虫リソース情報
 			//***************************************
-			const resultsAdult = await this.query({
+			const results16 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_adult.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
-			const resultsAdultImage = await this.query({
+			const resultsAdult = unwrapValueFromBinding(results16);
+
+			const results17 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
-			const resultsAdultPhenotype = await this.query({
+			const resultsAdultImage = unwrapValueFromBinding(results17);
+
+			let results18 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
@@ -14212,40 +14326,69 @@ class SilkwormDetailsSearch extends Stanza {
 					language: `${this.params['language']}`,
 				},
 			});
-			const resultsAdultGene = await this.query({
+			let resultsAdultPhenotype = unwrapValueFromBinding(results18);
+            if (resultsAdultPhenotype.length != 0) {
+                resultsAdultPhenotype.forEach(p => {
+                    let linkedUrls = "";
+                    let urls = p.bmpo.split("<br/>");
+                    urls.forEach(url => {
+                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+                    });
+                    p.bmpo = linkedUrls;
+                    linkedUrls = "";
+                    urls = p.dpo.split("<br/>");
+                    urls.forEach(url => {
+                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+                    });
+                    p.dpo = linkedUrls;
+                });
+            }
+
+			let results19 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
+			let resultsAdultGene = unwrapValueFromBinding(results19);
+            if (resultsAdultGene.length != 0) {
+                resultsAdultGene.forEach(g => {
+                    let linkedUrls = "";
+                    let urls = g.url.split("<br/>");
+                    urls.forEach(url => {
+                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+                    });
+                    g.url = linkedUrls;
+                });
+            }
 
 			this.renderTemplate({
 				template: 'stanza.html.hbs',
 				parameters: {
-					information		: unwrapValueFromBinding(resultsInformation),
-					reference		: unwrapValueFromBinding(resultsReference),
+					information		: resultsInformation,
+					reference		: resultsReference,
 
-					egg				: unwrapValueFromBinding(resultsEgg),
-					egg_image		: unwrapValueFromBinding(resultsEggImage),
-					egg_phenotype	: unwrapValueFromBinding(resultsEggPhenotype),
-					egg_gene		: unwrapValueFromBinding(resultsEggGene),
+					egg				: resultsEgg,
+					egg_image		: resultsEggImage,
+					egg_phenotype	: resultsEggPhenotype,
+					egg_gene		: resultsEggGene,
 
-					larva			: unwrapValueFromBinding(resultsLarva),
-					larva_image		: unwrapValueFromBinding(resultsLarvaImage),
-					larva_phenotype	: unwrapValueFromBinding(resultsLarvaPhenotype),
-					larva_feeding	: unwrapValueFromBinding(resultsLarvaFeeding),
-					larva_gene		: unwrapValueFromBinding(resultsLarvaGene),
+					larva			: resultsLarva,
+					larva_image		: resultsLarvaImage,
+					larva_phenotype	: resultsLarvaPhenotype,
+					larva_feeding	: resultsLarvaFeeding,
+					larva_gene		: resultsLarvaGene,
 
-					pupa			: unwrapValueFromBinding(resultsPupa),
-					pupa_image		: unwrapValueFromBinding(resultsPupaImage),
-					pupa_phenotype	: unwrapValueFromBinding(resultsPupaPhenotype),
-					pupa_gene		: unwrapValueFromBinding(resultsPupaGene),
+					pupa			: resultsPupa,
+					pupa_image		: resultsPupaImage,
+					pupa_phenotype	: resultsPupaPhenotype,
+					pupa_gene		: resultsPupaGene,
 
-					adult			: unwrapValueFromBinding(resultsAdult),
-					adult_image		: unwrapValueFromBinding(resultsAdultImage),
-					adult_phenotype	: unwrapValueFromBinding(resultsAdultPhenotype),
-					adult_gene		: unwrapValueFromBinding(resultsAdultGene),
+					adult			: resultsAdult,
+					adult_image		: resultsAdultImage,
+					adult_phenotype	: resultsAdultPhenotype,
+					adult_gene		: resultsAdultGene,
 
 				}
 			});
