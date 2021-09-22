@@ -221,22 +221,22 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			let resultsPupaPhenotype = unwrapValueFromBinding(results14);
-            if (resultsPupaPhenotype.length != 0) {
-                resultsPupaPhenotype.forEach(p => {
-                    let linkedUrls = "";
-                    let urls = p.bmpo.split("<br/>");
-                    urls.forEach(url => {
-                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-                    });
-                    p.bmpo = linkedUrls;
-                    linkedUrls = "";
-                    urls = p.dpo.split("<br/>");
-                    urls.forEach(url => {
-                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-                    });
-                    p.dpo = linkedUrls;
-                });
-            }
+			if (resultsPupaPhenotype.length != 0) {
+				resultsPupaPhenotype.forEach(p => {
+					let linkedUrls = "";
+					let urls = p.bmpo.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					p.bmpo = linkedUrls;
+					linkedUrls = "";
+					urls = p.dpo.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					p.dpo = linkedUrls;
+				});
+			}
 
 			let results15 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
@@ -246,16 +246,16 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			let resultsPupaGene = unwrapValueFromBinding(results15);
-            if (resultsPupaGene.length != 0) {
-                resultsPupaGene.forEach(g => {
-                    let linkedUrls = "";
-                    let urls = g.url.split("<br/>");
-                    urls.forEach(url => {
-                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-                    });
-                    g.url = linkedUrls;
-                });
-            }
+			if (resultsPupaGene.length != 0) {
+				resultsPupaGene.forEach(g => {
+					let linkedUrls = "";
+					let urls = g.url.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					g.url = linkedUrls;
+				});
+			}
 
 			//***************************************
 			//  成虫リソース情報
@@ -287,22 +287,22 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			let resultsAdultPhenotype = unwrapValueFromBinding(results18);
-            if (resultsAdultPhenotype.length != 0) {
-                resultsAdultPhenotype.forEach(p => {
-                    let linkedUrls = "";
-                    let urls = p.bmpo.split("<br/>");
-                    urls.forEach(url => {
-                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-                    });
-                    p.bmpo = linkedUrls;
-                    linkedUrls = "";
-                    urls = p.dpo.split("<br/>");
-                    urls.forEach(url => {
-                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-                    });
-                    p.dpo = linkedUrls;
-                });
-            }
+			if (resultsAdultPhenotype.length != 0) {
+				resultsAdultPhenotype.forEach(p => {
+					let linkedUrls = "";
+					let urls = p.bmpo.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					p.bmpo = linkedUrls;
+					linkedUrls = "";
+					urls = p.dpo.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					p.dpo = linkedUrls;
+				});
+			}
 
 			let results19 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
@@ -312,16 +312,16 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			let resultsAdultGene = unwrapValueFromBinding(results19);
-            if (resultsAdultGene.length != 0) {
-                resultsAdultGene.forEach(g => {
-                    let linkedUrls = "";
-                    let urls = g.url.split("<br/>");
-                    urls.forEach(url => {
-                        linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-                    });
-                    g.url = linkedUrls;
-                });
-            }
+			if (resultsAdultGene.length != 0) {
+				resultsAdultGene.forEach(g => {
+					let linkedUrls = "";
+					let urls = g.url.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					g.url = linkedUrls;
+				});
+			}
 
 			this.renderTemplate({
 				template: 'stanza.html.hbs',
