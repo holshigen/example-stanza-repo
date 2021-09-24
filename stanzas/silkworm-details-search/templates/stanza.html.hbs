@@ -99,7 +99,7 @@
 	{{#if egg_gene}}
 		<thead class="thead-dark">
 			<th colspan=4">Gene</th><
-		/thead>
+		</thead>
 		<tr>
 			<th>Gene ID</th>
 			<th>Name</th>
@@ -260,15 +260,17 @@
 			<th colspan=4">Phenotype</th>
 		</thead>
 		<tr>
-			<th colspan="1">Phenotype</th>
-			<th colspan="2">BMPO</th>
-			<th colspan="1">DPO</th>
+			<th>Phenotype</th>
+			<th>BMPO</th>
+			<th>DPO</th>
+			<th>Reference</th>
 		</tr>
 		{{#each pupa_phenotype as |pupa_phenotype|}}
 		<tr>
-			<td colspan="1">{{{pupa_phenotype.label}}}</td>
-			<td colspan="2">{{{pupa_phenotype.bmpo}}}</td>
-			<td colspan="1">{{{pupa_phenotype.dpo}}}</td>
+			<td>{{{pupa_phenotype.label}}}</td>
+			<td>{{{pupa_phenotype.bmpo}}}</td>
+			<td>{{{pupa_phenotype.dpo}}}</td>
+			<td>{{{pupa_phenotype.reference}}}</td>
 		</tr>
 		{{/each}}
 	{{/if}}
@@ -325,15 +327,17 @@
 			<th colspan=4">Phenotype</th>
 		</thead>
 		<tr>
-			<th colspan="1">Phenotype</th>
-			<th colspan="2">BMPO</th>
-			<th colspan="1">DPO</th>
+			<th>Phenotype</th>
+			<th>BMPO</th>
+			<th>DPO</th>
+			<th>Reference</th>
 		</tr>
 		{{#each adult_phenotype as |adult_phenotype|}}
 		<tr>
-			<td colspan="1">{{{adult_phenotype.label}}}</td>
-			<td colspan="2">{{{adult_phenotype.bmpo}}}</td>
-			<td colspan="1">{{{adult_phenotype.dpo}}}</td>
+			<td>{{{adult_phenotype.label}}}</td>
+			<td>{{{adult_phenotype.bmpo}}}</td>
+			<td>{{{adult_phenotype.dpo}}}</td>
+			<td>{{{adult_phenotype.reference}}}</td>
 		</tr>
 		{{/each}}
 	{{/if}}
