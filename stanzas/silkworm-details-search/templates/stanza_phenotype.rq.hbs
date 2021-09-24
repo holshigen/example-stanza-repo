@@ -50,7 +50,14 @@ WHERE {
 
 		_:b_phenotype a sio:SIO_010056 ;
 			rdfs:label ?label .
+		filter(LANG(?label) = '')
 
+		OPTIONAL{
+			_:b_phenotype sio:SIO_000255 ?bmpo.
+		}
+		OPTIONAL{
+			_:b_phenotype rdfs:seeAlso ?dpo.
+		}
 		OPTIONAL{
 			_:b_phenotype dcterms:reference _:b_reference .
 
@@ -73,22 +80,6 @@ WHERE {
 			}
 
 			filter(LANG(?author_name) = '{{language}}')
-		}
-
-		OPTIONAL{
-			?Resource dcterms:identifier "{{id}}" ;
-				sio:SIO_001279 _:b_phenotype2 .
-
-			_:b_phenotype2 a sio:SIO_010056 ;
-				sio:SIO_000255 ?bmpo.
-		}
-
-		OPTIONAL{
-			?Resource dcterms:identifier "{{id}}" ;
-				sio:SIO_001279 _:b_phenotype3 .
-
-			_:b_phenotype3 a sio:SIO_010056 ;
-				rdfs:seeAlso ?dpo.
 		}
 	}
 
