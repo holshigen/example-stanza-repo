@@ -50,31 +50,46 @@ WHERE {
 
 		_:b_phenotype a sio:SIO_010056 ;
 			rdfs:label ?label ;
-			dcterms:reference _:b_reference .
-		filter(LANG(?label) = '')
-
-		_:b_reference a bibo:Article ;
-			prism:publicationName ?puclication_name ;
-			prism:volume ?volume ;
-			prism:number ?number ;
-			prism:startingPage ?starting_page ;
-			prism:endingPage ?ending_page ;
-			dcterms:date ?date ;
-			rdfs:seeAlso ?url .
-		filter(LANG(?puclication_name) = '{{language}}')
 
 		OPTIONAL{
-			_:b_phenotype sio:SIO_000255 ?bmpo.
-		}
-		OPTIONAL{
-			_:b_phenotype rdfs:seeAlso ?dpo.
-		}
+			_:b_phenotype dcterms:reference _:b_reference .
 
-		OPTIONAL {
-			_:b_reference dc:creater ?author .
-			?author a foaf:Person ;
-				foaf:name ?author_name .
+			_:b_reference a bibo:Article ;
+				prism:publicationName ?puclication_name ;
+				prism:volume ?volume ;
+				prism:number ?number ;
+				prism:startingPage ?starting_page ;
+				prism:endingPage ?ending_page ;
+				dcterms:date ?date ;
+				rdfs:seeAlso ?url .
+
+			OPTIONAL{
+				_:b_reference dc:creater _:b_author.
+
+				_:b_author a foaf:Person;
+					foaf:name ?author_name .
+
+				filter(LANG(?author_name) = '{{language}}')
+			}
+
 			filter(LANG(?author_name) = '{{language}}')
 		}
+
+		OPTIONAL{
+			?Resource dcterms:identifier "a19_egg" ;
+				sio:SIO_001279 _:b_phenotype2 .
+
+			_:b_phenotype2 a sio:SIO_010056 ;
+				sio:SIO_000255 ?bmpo.
+		}
+
+		OPTIONAL{
+			?Resource dcterms:identifier "a19_egg" ;
+				sio:SIO_001279 _:b_phenotype3 .
+
+			_:b_phenotype3 a sio:SIO_010056 ;
+				rdfs:seeAlso ?dpo.
+		}
 	}
+
 }
