@@ -15074,7 +15074,11 @@ var templates = [
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":72,"column":33},"end":{"line":72,"column":45}}}) : helper))) != null ? stack1 : "")
     + "')\r\n			}\r\n\r\n			filter(LANG(?author_name) = '"
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":75,"column":32},"end":{"line":75,"column":44}}}) : helper))) != null ? stack1 : "")
-    + "')\r\n		}\r\n\r\n		OPTIONAL{\r\n			?Resource dcterms:identifier \"a19_egg\" ;\r\n				sio:SIO_001279 _:b_phenotype2 .\r\n\r\n			_:b_phenotype2 a sio:SIO_010056 ;\r\n				sio:SIO_000255 ?bmpo.\r\n		}\r\n\r\n		OPTIONAL{\r\n			?Resource dcterms:identifier \"a19_egg\" ;\r\n				sio:SIO_001279 _:b_phenotype3 .\r\n\r\n			_:b_phenotype3 a sio:SIO_010056 ;\r\n				rdfs:seeAlso ?dpo.\r\n		}\r\n	}\r\n\r\n}\r\n";
+    + "')\r\n		}\r\n\r\n		OPTIONAL{\r\n			?Resource dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":79,"column":33},"end":{"line":79,"column":39}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\r\n				sio:SIO_001279 _:b_phenotype2 .\r\n\r\n			_:b_phenotype2 a sio:SIO_010056 ;\r\n				sio:SIO_000255 ?bmpo.\r\n		}\r\n\r\n		OPTIONAL{\r\n			?Resource dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":87,"column":33},"end":{"line":87,"column":39}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\r\n				sio:SIO_001279 _:b_phenotype3 .\r\n\r\n			_:b_phenotype3 a sio:SIO_010056 ;\r\n				rdfs:seeAlso ?dpo.\r\n		}\r\n	}\r\n\r\n}\r\n";
 },"useData":true}],
 ["stanza_pupa.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
