@@ -64,22 +64,19 @@ WHERE {
 			_:b_reference a bibo:Article ;
 				prism:publicationName ?puclication_name ;
 				prism:volume ?volume ;
-				prism:number ?number ;
 				prism:startingPage ?starting_page ;
 				prism:endingPage ?ending_page ;
 				dcterms:date ?date ;
 				rdfs:seeAlso ?url .
+			filter(LANG(?puclication_name) = '{{language}}')
 
 			OPTIONAL{
 				_:b_reference dc:creater _:b_author.
 
 				_:b_author a foaf:Person;
 					foaf:name ?author_name .
-
 				filter(LANG(?author_name) = '{{language}}')
 			}
-
-			filter(LANG(?author_name) = '{{language}}')
 		}
 	}
 

@@ -4,7 +4,7 @@ import { unwrapValueFromBinding } from 'togostanza/utils';
  * jQueryはウェブアプリケーション側のPrimefacesと衝突するため通常はコメントアウトしておく。
  * Stanza単体で動作させる場合はコメントを外す。
  */
-//import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
+import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
 
 export default class SilkwormDetailsSearch extends Stanza {
 	async render() {
@@ -28,6 +28,16 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			const resultsInformation = unwrapValueFromBinding(results1);
+			if (resultsInformation.length != 0) {
+				resultsInformation.forEach(i => {
+					let linkedUrls = "";
+					let urls = i.journal.split("<br/>");
+					urls.forEach(url => {
+						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
+					});
+					i.journal = linkedUrls;
+				});
+			}
 
 			const results2 = await this.query({
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
@@ -38,6 +48,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			const resultsReference = unwrapValueFromBinding(results2);
+
 
 			//***************************************
 			//  卵リソース情報
@@ -323,33 +334,33 @@ export default class SilkwormDetailsSearch extends Stanza {
 				});
 			}
 
+
 			this.renderTemplate({
 				template: 'stanza.html.hbs',
 				parameters: {
-					information		: resultsInformation,
+					information		: resultsInformation[0],
 					reference		: resultsReference,
 
-					egg				: resultsEgg,
+					egg				: resultsEgg[0],
 					egg_image		: resultsEggImage,
 					egg_phenotype	: resultsEggPhenotype,
 					egg_gene		: resultsEggGene,
 
-					larva			: resultsLarva,
+					larva			: resultsLarva[0],
 					larva_image		: resultsLarvaImage,
 					larva_phenotype	: resultsLarvaPhenotype,
 					larva_feeding	: resultsLarvaFeeding,
 					larva_gene		: resultsLarvaGene,
 
-					pupa			: resultsPupa,
+					pupa			: resultsPupa[0],
 					pupa_image		: resultsPupaImage,
 					pupa_phenotype	: resultsPupaPhenotype,
 					pupa_gene		: resultsPupaGene,
 
-					adult			: resultsAdult,
+					adult			: resultsAdult[0],
 					adult_image		: resultsAdultImage,
 					adult_phenotype	: resultsAdultPhenotype,
 					adult_gene		: resultsAdultGene,
-
 				}
 			});
 
