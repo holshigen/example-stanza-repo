@@ -14494,7 +14494,7 @@ var templates = [
     + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"information") : depth0)) != null ? lookupProperty(stack1,"strain") : stack1), depth0))
     + "</td>\n		</tr>\n		<tr>\n			<th class=\"sub-title\">Taxonomy ID</th>\n			<td><a href=\""
     + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"information") : depth0)) != null ? lookupProperty(stack1,"taxonomy_id") : stack1), depth0))
-    + "\">"
+    + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"information") : depth0)) != null ? lookupProperty(stack1,"taxonomy_id") : stack1), depth0))
     + "</a></td>\n		</tr>\n		<tr>\n			<th class=\"sub-title\">Origin</th>\n			<td>"
     + ((stack1 = alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"information") : depth0)) != null ? lookupProperty(stack1,"origin") : stack1), depth0)) != null ? stack1 : "")
@@ -14506,7 +14506,7 @@ var templates = [
     + ((stack1 = alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"information") : depth0)) != null ? lookupProperty(stack1,"journal") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n		<tr>\n			<th class=\"sub-title\">HP</th>\n			<td><a href=\""
     + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"information") : depth0)) != null ? lookupProperty(stack1,"homepage") : stack1), depth0))
-    + "\">"
+    + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"information") : depth0)) != null ? lookupProperty(stack1,"homepage") : stack1), depth0))
     + "</a></td>\n		</tr>\n	</table>\n";
 },"2":function(container,depth0,helpers,partials,data,blockParams) {
@@ -14533,7 +14533,7 @@ var templates = [
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"ending_page") : stack1), depth0))
     + ".\n				<a href=\""
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"url") : stack1), depth0))
-    + "\">"
+    + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"url") : stack1), depth0))
     + "</a><br/>\n";
 },"4":function(container,depth0,helpers,partials,data) {
@@ -14621,7 +14621,7 @@ var templates = [
 
   return "		<tr>\n			<td><a href=\"https://www.ncbi.nlm.nih.gov/gene/"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
-    + "\">"
+    + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
     + "</a></td>\n			<td>"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"name") : stack1), depth0))
@@ -14760,7 +14760,7 @@ var templates = [
 
   return "		<tr>\n			<td colspan=\"1\"><a href=\"https://www.ncbi.nlm.nih.gov/gene/"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
-    + "\">"
+    + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
     + "</a></td>\n			<td colspan=\"2\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"name") : stack1), depth0))
@@ -14852,7 +14852,7 @@ var templates = [
 
   return "		<tr>\n			<td><a href=\"https://www.ncbi.nlm.nih.gov/gene/"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
-    + "\">"
+    + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
     + "</a></td>\n			<td>"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"name") : stack1), depth0))
@@ -14944,7 +14944,7 @@ var templates = [
 
   return "		<tr>\n			<td><a href=\"https://www.ncbi.nlm.nih.gov/gene/"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
-    + "\">"
+    + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
     + "</a></td>\n			<td>"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"name") : stack1), depth0))
