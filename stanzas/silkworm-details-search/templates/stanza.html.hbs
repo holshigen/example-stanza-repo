@@ -18,7 +18,7 @@
 		</tr>
 		<tr>
 			<th class="sub-title">Taxonomy ID</th>
-			<td><a href="{{information.taxonomy_id}}">{{information.taxonomy_id}}</a></td>
+			<td><a href="{{information.taxonomy_id}}" target="_blank">{{information.taxonomy_id}}</a></td>
 		</tr>
 		<tr>
 			<th class="sub-title">Origin</th>
@@ -33,7 +33,7 @@
 			<td>
 				{{#each reference as |reference|}}
 					{{reference.author_name}} ({{reference.date}}). {{reference.puclication_name}}, {{reference.volume}}, {{reference.number}}, {{reference.starting_page}}-{{reference.ending_page}}.
-				<a href="{{reference.url}}">{{reference.url}}</a><br/>
+				<a href="{{reference.url}}" target="_blank">{{reference.url}}</a><br/>
 				{{/each}}
 			</td>
 		</tr>
@@ -43,7 +43,7 @@
 		</tr>
 		<tr>
 			<th class="sub-title">HP</th>
-			<td><a href="{{information.homepage}}">{{information.homepage}}</a></td>
+			<td><a href="{{information.homepage}}" target="_blank">{{information.homepage}}</a></td>
 		</tr>
 	</table>
 	{{else}}
@@ -103,7 +103,7 @@
 		</tr>
 			{{#each egg_gene as |egg_gene|}}
 		<tr>
-			<td><a href="https://www.ncbi.nlm.nih.gov/gene/{{egg_gene.id}}">{{egg_gene.id}}</a></td>
+			<td><a href="https://www.ncbi.nlm.nih.gov/gene/{{egg_gene.id}}" target="_blank">{{egg_gene.id}}</a></td>
 			<td>{{egg_gene.name}}</td>
 			<td>{{egg_gene.synonym}}</td>
 			<td>{{{egg_gene.url}}}</td>
@@ -208,7 +208,7 @@
 		</tr>
 			{{#each larva_gene as |larva_gene|}}
 		<tr>
-			<td colspan="1"><a href="https://www.ncbi.nlm.nih.gov/gene/{{larva_gene.id}}">{{larva_gene.id}}</a></td>
+			<td colspan="1"><a href="https://www.ncbi.nlm.nih.gov/gene/{{larva_gene.id}}" target="_blank">{{larva_gene.id}}</a></td>
 			<td colspan="2">{{larva_gene.name}}</td>
 			<td colspan="2">{{larva_gene.synonym}}</td>
 			<td colspan="4">{{{larva_gene.url}}}</td>
@@ -272,7 +272,7 @@
 		</tr>
 			{{#each pupa_gene as |pupa_gene|}}
 		<tr>
-			<td><a href="https://www.ncbi.nlm.nih.gov/gene/{{pupa_gene.id}}">{{pupa_gene.id}}</a></td>
+			<td><a href="https://www.ncbi.nlm.nih.gov/gene/{{pupa_gene.id}}" target="_blank">{{pupa_gene.id}}</a></td>
 			<td>{{pupa_gene.name}}</td>
 			<td>{{pupa_gene.synonym}}</td>
 			<td>{{{pupa_gene.url}}}</td>
@@ -335,7 +335,7 @@
 		</tr>
 			{{#each adult_gene as |adult_gene|}}
 		<tr>
-			<td><a href="https://www.ncbi.nlm.nih.gov/gene/{{adult_gene.id}}">{{adult_gene.id}}</a></td>
+			<td><a href="https://www.ncbi.nlm.nih.gov/gene/{{adult_gene.id}}" target="_blank">{{adult_gene.id}}</a></td>
 			<td>{{adult_gene.name}}</td>
 			<td>{{adult_gene.synonym}}</td>
 			<td>{{{adult_gene.url}}}</td>
