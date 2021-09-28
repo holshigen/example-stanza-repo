@@ -68,10 +68,22 @@ WHERE{
 
 		}
 	}
-	# puclication_name の empty 判断
-	BIND(BOUND(?puclication_name) && strlen(?puclication_name) >0 as ?pn_notEmpty)
+	# author_name が empty の場合 "-" とする
+	BIND(BOUND(?author_name) && strlen(?author_name) >0 as ?an_notEmpty)
+	BIND( if (?an_notEmpty,
+			?author_name,
+			"-")
+		 as ?author_name )
+
+	# date が empty の場合 "-" とする
+	BIND(BOUND(?date) && strlen(?date) >0 as ?dt_notEmpty)
+	BIND( if (?dt_notEmpty,
+			?date,
+			"-")
+		 as ?date )
 
 	# puclication_name が empty でない場合、文字連結して reference を作成
+	BIND(BOUND(?puclication_name) && strlen(?puclication_name) >0 as ?pn_notEmpty)
 	BIND( if (?pn_notEmpty,
 			CONCAT( ?author_name, ", ", " (",
 				?date,
@@ -81,11 +93,11 @@ WHERE{
 				?volume,
 				", ",
 				?number,
-				", ",
+				", [",
 				?starting_page,
 				"-",
 				?ending_page,
-				". ",
+				"]. ",
 				"<a href='",
 				?url,
 				"'>",
