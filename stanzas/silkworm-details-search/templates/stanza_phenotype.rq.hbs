@@ -13,72 +13,86 @@ PREFIX obo: <http://purl.obolibrary.org/obo/>
 PREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>
 
 
+
 SELECT distinct
 	?label
 	?bmpo
 	?dpo
 	(group_concat(distinct ?reference;separator = "<br/>") AS ?reference)
-WHERE {
-	SELECT distinct
-		?label
-		(group_concat(distinct ?bmpo;separator = "<br/>") AS ?bmpo)
-		(group_concat(distinct ?dpo;separator = "<br/>") AS ?dpo)
-		(concat(
-			group_concat(distinct ?author_name;separator = ", ") ,
-			" (",
-			?date,
-			"). ",
-			?puclication_name,
-			", ",
-			?volume,
-			", ",
-			?number,
-			", ",
-			?starting_page,
-			"-",
-			?ending_page,
-			". ",
-			"<a href='",
-			?url,
-			"'>",
-			?url,
-			"</a>"
-			) AS ?reference)
-	WHERE {
-		?Resource dcterms:identifier "{{id}}" ;
-			sio:SIO_001279 _:b_phenotype .
-
-		_:b_phenotype a sio:SIO_010056 ;
-			rdfs:label ?label .
-		filter(LANG(?label) = '')
-
-		OPTIONAL{
-			_:b_phenotype sio:SIO_000255 ?bmpo.
-		}
-		OPTIONAL{
-			_:b_phenotype rdfs:seeAlso ?dpo.
-		}
-		OPTIONAL{
-			_:b_phenotype dcterms:reference _:b_reference .
-
-			_:b_reference a bibo:Article ;
-				prism:publicationName ?puclication_name ;
-				prism:volume ?volume ;
-				prism:number ?number ;
-				prism:startingPage ?starting_page ;
-				prism:endingPage ?ending_page ;
-				dcterms:date ?date ;
-				rdfs:seeAlso ?url .
-			filter(LANG(?puclication_name) = '{{language}}')
+WHERE{
+	{ SELECT distinct
+			?label
+			(group_concat(distinct ?bmpo;separator = "<br/>") AS ?bmpo)
+			(group_concat(distinct ?dpo;separator = "<br/>") AS ?dpo)
+			?puclication_name
+			?volume
+			?number
+			?starting_page
+			?ending_page
+			?date
+			?url
+			(group_concat(distinct ?author_name;separator = ", " ) AS ?author_name)
+		WHERE {
+			?Resource dcterms:identifier "{{id}}" ;
+				sio:SIO_001279 _:b_phenotype .
+			_:b_phenotype a sio:SIO_010056 ;
+				rdfs:label ?label .
+			filter(LANG(?label) = '')
 
 			OPTIONAL{
-				_:b_reference dc:creater _:b_author.
-
-				_:b_author a foaf:Person;
-					foaf:name ?author_name .
-				filter(LANG(?author_name) = '{{language}}')
+				_:b_phenotype sio:SIO_000255 ?bmpo.
 			}
+			OPTIONAL{
+				_:b_phenotype rdfs:seeAlso ?dpo.
+			}
+			OPTIONAL{
+				_:b_phenotype dcterms:reference _:b_reference .
+
+				_:b_reference a bibo:Article ;
+					prism:publicationName ?puclication_name ;
+					prism:volume ?volume ;
+					prism:number ?number ;
+					prism:startingPage ?starting_page ;
+					prism:endingPage ?ending_page ;
+					dcterms:date ?date ;
+					rdfs:seeAlso ?url .
+				filter(LANG(?puclication_name) = '{{language}}')
+				OPTIONAL{
+					_:b_reference dc:creater _:b_author.
+
+					_:b_author a foaf:Person;
+						foaf:name ?author_name .
+					filter(LANG(?author_name) = '{{language}}')
+				}
+			}
+
 		}
 	}
+	# puclication_name の empty 判断
+	BIND(BOUND(?puclication_name) && strlen(?puclication_name) >0 as ?pn_notEmpty)
+
+	# puclication_name が empty でない場合、文字連結して reference を作成
+	BIND( if (?pn_notEmpty,
+			CONCAT( ?author_name, ", ", " (",
+				?date,
+				"). ",
+				?puclication_name,
+				", ",
+				?volume,
+				", ",
+				?number,
+				", ",
+				?starting_page,
+				"-",
+				?ending_page,
+				". ",
+				"<a href='",
+				?url,
+				"'>",
+				?url,
+				"</a>"
+				),
+			"")
+		 as ?reference )
 
 }
