@@ -1,0 +1,33 @@
+DEFINE sql:select-option "order"
+PREFIX sio: <http://semanticscience.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+SELECT distinct
+	?label
+	(group_concat(distinct ?bmpo;separator = "<br/>") AS ?bmpo)
+	?description
+FROM <http://localhost:8890/silkworm>
+WHERE {
+	?Resource a brso:BiologicalResourceLarva ;
+		dcterms:identifier "{{id}}" ;
+		sio:SIO_001279 _:b_phenotype .
+
+	_:b_phenotype a sio:SIO_010056 ;
+		rdfs:label ?label_en ;
+		rdfs:label ?label .
+
+	filter(LANG(?label_en) = 'en')
+	?label_en bif:contains "'instar period' or 'diapause period'".
+
+	filter(LANG(?label) = '{{language}}')
+
+	OPTIONAL{
+		_:b_phenotype sio:SIO_000255 ?bmpo.
+	}
+	OPTIONAL{
+		_:b_phenotype dcterms:description ?description.
+		filter(LANG(?description) = '{{language}}')
+	}
+}
+

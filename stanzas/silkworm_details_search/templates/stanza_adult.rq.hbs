@@ -1,0 +1,18 @@
+PREFIX brso: <http://purl.jp/bio/10/brso/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+SELECT
+	?name
+	?resource_state
+FROM <http://localhost:8890/silkworm>
+WHERE {
+	?Resource a brso:BiologicalResourceAdult ;
+		dcterms:identifier "{{id}}" ;
+		rdfs:label ?name ;
+		brso:resource_state _:b_resource_state .
+
+	_:b_resource_state a brso:ResourceState ;
+		rdfs:label ?resource_state .
+}
+LIMIT 1

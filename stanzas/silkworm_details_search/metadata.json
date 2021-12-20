@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "silkworm-details-search",
-  "stanza:label": "Silkworm details search",
+  "@id": "silkworm_details_search",
+  "stanza:label": "Silkworm Details Search",
   "stanza:definition": "",
   "stanza:type": "Stanza",
   "stanza:display": "Text",

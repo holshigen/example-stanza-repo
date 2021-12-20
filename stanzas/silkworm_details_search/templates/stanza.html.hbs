@@ -86,7 +86,7 @@
 		<tr>
 			<td>{{{egg_phenotype.label}}}</td>
 			<td>{{{egg_phenotype.bmpo}}}</td>
-			<td>{{{egg_phenotype.dpo}}}</td>
+			<td>{{{egg_phenotype.related_class}}}</td>
 			<td>{{{egg_phenotype.reference}}}</td>
 		</tr>
 			{{/each}}
@@ -149,7 +149,7 @@
 		<tr>
 			<td colspan="1">{{{larva_phenotype.label}}}</td>
 			<td colspan="2">{{{larva_phenotype.bmpo}}}</td>
-			<td colspan="2">{{{larva_phenotype.dpo}}}</td>
+			<td colspan="2">{{{larva_phenotype.related_class}}}</td>
 			<td colspan="4">{{{larva_phenotype.reference}}}</td>
 		</tr>
 			{{/each}}
@@ -171,31 +171,23 @@
 		</tr>
 			{{/each}}
 		{{/if}}
+		{{#if larva_period}}
 		<thead class="thead-dark">
-			<th colspan="9">Larva Period : {{larva.larva_period}} (hour)</th>
+			<th colspan="9">Larval Period</th>
 		</thead>
 		<tr>
-			<th>1st instar</th>
-			<th>1st diapause</th>
-			<th>2nd instar</th>
-			<th>2nd diapause</th>
-			<th>3th instar</th>
-			<th>3th diapause</th>
-			<th>4th instar</th>
-			<th>4th diapause</th>
-			<th>5th instar</th>
+			<th colspan="3">Feeding ability</th>
+			<th colspan="3">BMPO</th>
+			<th colspan="3">Description</th>
 		</tr>
+			{{#each larva_period as |larva_period|}}
 		<tr>
-			<td>{{larva.1st_instar}}</td>
-			<td>{{larva.1st_diapause}}</td>
-			<td>{{larva.2nd_instar}}</td>
-			<td>{{larva.2nd_diapause}}</td>
-			<td>{{larva.3th_instar}}</td>
-			<td>{{larva.3th_diapause}}</td>
-			<td>{{larva.4th_instar}}</td>
-			<td>{{larva.4th_diapause}}</td>
-			<td>{{larva.5th_instar}}</td>
+			<td colspan="3">{{{larva_period.label}}}</td>
+			<td colspan="3">{{{larva_period.bmpo}}}</td>
+			<td colspan="3">{{{larva_period.description}}}</td>
 		</tr>
+			{{/each}}
+		{{/if}}
 		{{#if larva_gene}}
 		<thead class="thead-dark">
 			<th colspan=9">Gene</th>
@@ -255,7 +247,7 @@
 		<tr>
 			<td>{{{pupa_phenotype.label}}}</td>
 			<td>{{{pupa_phenotype.bmpo}}}</td>
-			<td>{{{pupa_phenotype.dpo}}}</td>
+			<td>{{{pupa_phenotype.related_class}}}</td>
 			<td>{{{pupa_phenotype.reference}}}</td>
 		</tr>
 			{{/each}}
@@ -318,7 +310,7 @@
 		<tr>
 			<td>{{{adult_phenotype.label}}}</td>
 			<td>{{{adult_phenotype.bmpo}}}</td>
-			<td>{{{adult_phenotype.dpo}}}</td>
+			<td>{{{adult_phenotype.related_class}}}</td>
 			<td>{{{adult_phenotype.reference}}}</td>
 		</tr>
 			{{/each}}

@@ -1,29 +1,23 @@
-PREFIX brso: <http://purl.jp/bio/10/brso/>
 PREFIX sio: <http://semanticscience.org/resource/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX so: <http://purl.obolibrary.org/obo/so#>
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX faldo: <http://biohackathon.org/resource/faldo#>
 PREFIX dcterms: <http://purl.org/dc/terms/>
-PREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-PREFIX org: <http://www.w3.org/ns/org#>
 PREFIX bibo: <http://purl.org/ontology/bibo/>
 PREFIX obo: <http://purl.obolibrary.org/obo/>
 PREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>
 
-
-
 SELECT distinct
 	?label
 	?bmpo
-	?dpo
+	?related_class
 	(group_concat(distinct ?reference;separator = "<br/>") AS ?reference)
+FROM <http://localhost:8890/silkworm>
 WHERE{
-	{ SELECT distinct
+	{
+		SELECT distinct
 			?label
 			(group_concat(distinct ?bmpo;separator = "<br/>") AS ?bmpo)
-			(group_concat(distinct ?dpo;separator = "<br/>") AS ?dpo)
+			(group_concat(distinct ?related_class;separator = "<br/>") AS ?related_class)
 			?puclication_name
 			?volume
 			?number
@@ -32,6 +26,7 @@ WHERE{
 			?date
 			?url
 			(group_concat(distinct ?author_name;separator = ", " ) AS ?author_name)
+		FROM <http://localhost:8890/silkworm>
 		WHERE {
 			?Resource dcterms:identifier "{{id}}" ;
 				sio:SIO_001279 _:b_phenotype .
@@ -43,7 +38,7 @@ WHERE{
 				_:b_phenotype sio:SIO_000255 ?bmpo.
 			}
 			OPTIONAL{
-				_:b_phenotype rdfs:seeAlso ?dpo.
+				_:b_phenotype rdfs:seeAlso ?related_class.
 			}
 			OPTIONAL{
 				_:b_phenotype dcterms:reference _:b_reference .
@@ -68,6 +63,7 @@ WHERE{
 
 		}
 	}
+
 	# author_name が empty の場合 "-" とする
 	BIND(BOUND(?author_name) && strlen(?author_name) >0 as ?an_notEmpty)
 	BIND( if (?an_notEmpty,
@@ -106,5 +102,4 @@ WHERE{
 				),
 			"")
 		 as ?reference )
-
 }

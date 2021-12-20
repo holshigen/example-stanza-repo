@@ -15,15 +15,12 @@ export default class SilkwormDetailsSearch extends Stanza {
 			if ($(this.root.querySelector("#loading")).length == 0) {
 				$(this.root.querySelector("main")).append("<div id='loading'>" + dispMsg + "</div>");
 			}
-			// オントロジーのURL
-			const dpo = 'https://data.bioontology.org/ontologies/DPO/classes/';
-			const bmpo = 'https://data.bioontology.org/ontologies/BMPO/classes/';
 
 			//***************************************
 			//  系統リソース情報
 			//***************************************
 			const results1 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_strain.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}`,
@@ -32,18 +29,18 @@ export default class SilkwormDetailsSearch extends Stanza {
 			});
 			const resultsInformation = unwrapValueFromBinding(results1);
 			if (resultsInformation.length != 0) {
-				resultsInformation.forEach(i => {
+				for( let i of resultsInformation) {
 					let linkedUrls = "";
 					let urls = i.journal.split("<br/>");
-					urls.forEach(url => {
+					for (let url of urls ) {
 						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-					});
-					i.journal = linkedUrls;
-				});
+					}
+					 i.journal = linkedUrls;
+				}
 			}
 
 			const results2 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_reference.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}`,
@@ -57,7 +54,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  卵リソース情報
 			//***************************************
 			const results3 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_egg.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -66,7 +63,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsEgg = unwrapValueFromBinding(results3);
 
 			const results4 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -75,7 +72,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsEggImage = unwrapValueFromBinding(results4);
 
 			let results5 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -83,64 +80,41 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			let resultsEggPhenotype = unwrapValueFromBinding(results5);
+
 			if (resultsEggPhenotype.length != 0) {
-				resultsEggPhenotype.forEach(p => {
+				for ( let p of resultsEggPhenotype){
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
 					let urls = p.bmpo.split("<br/>");
-					urls.forEach(url => {
-						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.bmpo = linkedUrls;
-							});
+					for ( let url of urls ) {
+						if( url.length != 0 ) {
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-
+					}
+					p.bmpo = linkedUrls;
+					// 関連クラスのURLをリンクに置換
 					linkedUrls = "";
-					urls = p.dpo.split("<br/>");
-					urls.forEach(url => {
-						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.dpo = linkedUrls;
-							});
+					urls = p.related_class.split("<br/>");
+					for ( let url of urls ) {
+						if( url.length != 0 ) {
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-				});
+					}
+					p.related_class = linkedUrls;
+				}
 			}
 
 			let results6 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
 				},
 			});
 			let resultsEggGene = unwrapValueFromBinding(results6);
+
 			if (resultsEggGene.length != 0) {
 				resultsEggGene.forEach(g => {
 					let linkedUrls = "";
@@ -156,7 +130,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  幼虫リソース情報
 			//***************************************
 			const results7 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_larva.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -165,7 +139,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsLarva = unwrapValueFromBinding(results7);
 
 			const results8 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -174,7 +148,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsLarvaImage = unwrapValueFromBinding(results8);
 
 			let results9 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -182,58 +156,34 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			let resultsLarvaPhenotype = unwrapValueFromBinding(results9);
+
 			if (resultsLarvaPhenotype.length != 0) {
-				resultsLarvaPhenotype.forEach(p => {
+				for( let p of resultsLarvaPhenotype){
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
 					let urls = p.bmpo.split("<br/>");
-					urls.forEach(url => {
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.bmpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-
+					}
+					p.bmpo = linkedUrls;
+					// 関連クラスのURLをリンクに置換
 					linkedUrls = "";
-					urls = p.dpo.split("<br/>");
-					urls.forEach(url => {
+					urls = p.related_class.split("<br/>");
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.dpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-				});
+					}
+					p.related_class = linkedUrls;
+				}
 			}
 
 			let results10 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_feeding_ability.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -241,11 +191,12 @@ export default class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			let resultsLarvaFeeding = unwrapValueFromBinding(results10);
+
 			if (resultsLarvaFeeding.lengh != 0) {
-				resultsLarvaFeeding.forEach(f => {
+				for ( let f of resultsLarvaFeeding) {
 					let linkedUrls = "";
 					let urls = f.bmpo.split("<br/>");
-					urls.forEach(url => {
+					for (let url of urls) {
 						if( url.length != 0 ){
 							// BioPortalより各オントロジーの prefLabelを取得
 							fetch( bmpo + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
@@ -253,231 +204,212 @@ export default class SilkwormDetailsSearch extends Stanza {
 								return response.json();
 							})
 							.then(result => {
-//								console.log(result.prefLabel);
 								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
 								f.bmpo = linkedUrls;
 							});
 						}
-					});
-
-				});
+					}
+				}
 			}
 
 			let results11 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
+				template: 'stanza_larval_period.hbs',
+				parameters: {
+					id		: `${this.params['id']}_larva`,
+					language: `${this.params['language']}`,
+				},
+			});
+			let resultsLarvalPeriod = unwrapValueFromBinding(results11);
+
+			if (resultsLarvalPeriod.lengh != 0) {
+				for ( let f of resultsLarvalPeriod) {
+					let linkedUrls = "";
+					let urls = f.bmpo.split("<br/>");
+					for (let url of urls) {
+						if( url.length != 0 ){
+							// BioPortalより各オントロジーの prefLabelを取得
+							fetch( bmpo + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
+							.then(response =>  {
+								return response.json();
+							})
+							.then(result => {
+								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
+								f.bmpo = linkedUrls;
+							});
+						}
+					}
+				}
+			}
+
+			let results12 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
 				},
 			});
-			let resultsLarvaGene = unwrapValueFromBinding(results11);
+			let resultsLarvaGene = unwrapValueFromBinding(results12);
+
 			if (resultsLarvaGene.length != 0) {
-				resultsLarvaGene.forEach(g => {
+				for (let g of resultsLarvaGene) {
 					let linkedUrls = "";
 					let urls = g.url.split("<br/>");
-					urls.forEach(url => {
+					for(let url of urls) {
 						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-					});
+					}
 					g.url = linkedUrls;
-				});
+				}
 			}
 
 			//***************************************
 			//  蛹リソース情報
 			//***************************************
-			const results12 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			const results13 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_pupa.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
-			const resultsPupa = unwrapValueFromBinding(results12);
+			const resultsPupa = unwrapValueFromBinding(results13);
 
-			const results13 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			const results14 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
-			const resultsPupaImage = unwrapValueFromBinding(results13);
+			const resultsPupaImage = unwrapValueFromBinding(results14);
 
-			let results14 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			let results15 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 					language: `${this.params['language']}`,
 				},
 			});
-			let resultsPupaPhenotype = unwrapValueFromBinding(results14);
+			let resultsPupaPhenotype = unwrapValueFromBinding(results15);
+
 			if (resultsPupaPhenotype.length != 0) {
-				resultsPupaPhenotype.forEach(p => {
+				for( let p of resultsPupaPhenotype){
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
 					let urls = p.bmpo.split("<br/>");
-					urls.forEach(url => {
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.bmpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-
+					}
+					p.bmpo = linkedUrls;
+					// 関連クラスのURLをリンクに置換
 					linkedUrls = "";
-					urls = p.dpo.split("<br/>");
-					urls.forEach(url => {
+					urls = p.related_class.split("<br/>");
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.dpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-				});
+					}
+					p.related_class = linkedUrls;
+				}
 			}
 
-			let results15 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			let results16 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
-			let resultsPupaGene = unwrapValueFromBinding(results15);
+			let resultsPupaGene = unwrapValueFromBinding(results16);
+
 			if (resultsPupaGene.length != 0) {
-				resultsPupaGene.forEach(g => {
+				for (let g of resultsPupaGene) {
 					let linkedUrls = "";
 					let urls = g.url.split("<br/>");
-					urls.forEach(url => {
+					for ( let url of urls ) {
 						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-					});
+					}
 					g.url = linkedUrls;
-				});
+				}
 			}
 
 			//***************************************
 			//  成虫リソース情報
 			//***************************************
-			const results16 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			const results17 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_adult.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
-			const resultsAdult = unwrapValueFromBinding(results16);
+			const resultsAdult = unwrapValueFromBinding(results17);
 
-			const results17 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			const results18 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
-			const resultsAdultImage = unwrapValueFromBinding(results17);
+			const resultsAdultImage = unwrapValueFromBinding(results18);
 
-			let results18 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			let results19 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 					language: `${this.params['language']}`,
 				},
 			});
-			let resultsAdultPhenotype = unwrapValueFromBinding(results18);
+			let resultsAdultPhenotype = unwrapValueFromBinding(results19);
 			if (resultsAdultPhenotype.length != 0) {
-				resultsAdultPhenotype.forEach(p => {
+				for( let p of resultsAdultPhenotype){
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
 					let urls = p.bmpo.split("<br/>");
-					urls.forEach(url => {
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.bmpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-
+					}
+					p.bmpo = linkedUrls;
+					// 関連クラスのURLをリンクに置換
 					linkedUrls = "";
-					urls = p.dpo.split("<br/>");
-					urls.forEach(url => {
+					urls = p.related_class.split("<br/>");
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.dpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-				});
+					}
+					p.related_class = linkedUrls;
+				}
 			}
 
-			let results19 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			let results20 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
-			let resultsAdultGene = unwrapValueFromBinding(results19);
+			let resultsAdultGene = unwrapValueFromBinding(results20);
 			if (resultsAdultGene.length != 0) {
-				resultsAdultGene.forEach(g => {
+				for (let g of resultsAdultGene) {
 					let linkedUrls = "";
 					let urls = g.url.split("<br/>");
-					urls.forEach(url => {
+					for ( let url of urls ) {
 						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-					});
+					}
 					g.url = linkedUrls;
-				});
+				}
 			}
 
 
@@ -496,6 +428,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 					larva_image		: resultsLarvaImage,
 					larva_phenotype	: resultsLarvaPhenotype,
 					larva_feeding	: resultsLarvaFeeding,
+					larva_period	: resultsLarvalPeriod,
 					larva_gene		: resultsLarvaGene,
 
 					pupa			: resultsPupa[0],
@@ -517,4 +450,36 @@ export default class SilkwormDetailsSearch extends Stanza {
 			console.error(e);
 		}
 	}
+}
+
+//***************************************
+// Bioportalからラベル取得用URL
+//***************************************
+const dpo = 'https://data.bioontology.org/ontologies/DPO/classes/';
+const bmpo = 'https://data.bioontology.org/ontologies/BMPO/classes/';
+const wb = 'https://data.bioontology.org/ontologies/WB-PHENOTYPE/classes/';
+
+//***************************************
+// オントロジークラスURIからリンクを生成し返す
+// Tartget: BMPO, DPO(FBcv), WB-PHENOTYPE
+//***************************************
+ async function replaceToLink(url){
+
+	let classUrl = "";
+	let linkedUrl = "";
+
+	if( url.match(/BMPO/)){
+		classUrl = bmpo;
+	} else if(url.match(/FBcv/)){
+		classUrl = dpo;
+	} else {
+		classUrl = wb;
+	}
+
+	// BioPortalより各オントロジーの prefLabelを取得
+	const response = await fetch(classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6');
+	const json = await response.json();
+	linkedUrl = "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + json.prefLabel + ")";
+
+	return linkedUrl;
 }
