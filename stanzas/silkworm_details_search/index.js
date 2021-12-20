@@ -194,27 +194,22 @@ export default class SilkwormDetailsSearch extends Stanza {
 
 			if (resultsLarvaFeeding.lengh != 0) {
 				for ( let f of resultsLarvaFeeding) {
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
 					let urls = f.bmpo.split("<br/>");
-					for (let url of urls) {
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( bmpo + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								f.bmpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
 					}
+					f.bmpo = linkedUrls;
 				}
 			}
 
 			let results11 = await this.query({
 				endpoint: 'http://133.39.75.125:8890/sparql/',
-				template: 'stanza_larval_period.hbs',
+				template: 'stanza_larval_period.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
 					language: `${this.params['language']}`,
@@ -223,22 +218,17 @@ export default class SilkwormDetailsSearch extends Stanza {
 			let resultsLarvalPeriod = unwrapValueFromBinding(results11);
 
 			if (resultsLarvalPeriod.lengh != 0) {
-				for ( let f of resultsLarvalPeriod) {
+				for ( let p of resultsLarvalPeriod) {
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
-					let urls = f.bmpo.split("<br/>");
-					for (let url of urls) {
+					let urls = p.bmpo.split("<br/>");
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( bmpo + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								f.bmpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
 					}
+					p.bmpo = linkedUrls;
 				}
 			}
 
