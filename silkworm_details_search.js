@@ -14238,27 +14238,22 @@ class SilkwormDetailsSearch extends Stanza {
 
 			if (resultsLarvaFeeding.lengh != 0) {
 				for ( let f of resultsLarvaFeeding) {
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
 					let urls = f.bmpo.split("<br/>");
-					for (let url of urls) {
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( bmpo + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								f.bmpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
 					}
+					f.bmpo = linkedUrls;
 				}
 			}
 
 			let results11 = await this.query({
 				endpoint: 'http://133.39.75.125:8890/sparql/',
-				template: 'stanza_larval_period.hbs',
+				template: 'stanza_larval_period.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
 					language: `${this.params['language']}`,
@@ -14267,22 +14262,17 @@ class SilkwormDetailsSearch extends Stanza {
 			let resultsLarvalPeriod = unwrapValueFromBinding(results11);
 
 			if (resultsLarvalPeriod.lengh != 0) {
-				for ( let f of resultsLarvalPeriod) {
+				for ( let p of resultsLarvalPeriod) {
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
-					let urls = f.bmpo.split("<br/>");
-					for (let url of urls) {
+					let urls = p.bmpo.split("<br/>");
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( bmpo + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								f.bmpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
 					}
+					p.bmpo = linkedUrls;
 				}
 			}
 
@@ -14839,7 +14829,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=\"9\">Larval Period</th>\n		</thead>\n		<tr>\n			<th colspan=\"3\">Feeding ability</th>\n			<th colspan=\"3\">BMPO</th>\n			<th colspan=\"3\">Description</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=\"9\">Larval Period</th>\n		</thead>\n		<tr>\n			<th colspan=\"3\">Larval Period</th>\n			<th colspan=\"3\">BMPO</th>\n			<th colspan=\"3\">Description</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"larva_period") : depth0),{"name":"each","hash":{},"fn":container.program(27, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":183,"column":3},"end":{"line":189,"column":12}}})) != null ? stack1 : "");
 },"27":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15167,7 +15157,7 @@ var templates = [
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
     + "\" ;\n		rdfs:label ?name ;\n		brso:resource_state _:b_resource_state .\n\n	_:b_resource_state a brso:ResourceState ;\n		rdfs:label ?resource_state .\n}\nLIMIT 1\n";
 },"useData":true}],
-["stanza_larval_period.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+["stanza_larval_period.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
