@@ -14059,15 +14059,12 @@ class SilkwormDetailsSearch extends Stanza {
 			if ($(this.root.querySelector("#loading")).length == 0) {
 				$(this.root.querySelector("main")).append("<div id='loading'>" + dispMsg + "</div>");
 			}
-			// オントロジーのURL
-			const dpo = 'https://data.bioontology.org/ontologies/DPO/classes/';
-			const bmpo = 'https://data.bioontology.org/ontologies/BMPO/classes/';
 
 			//***************************************
 			//  系統リソース情報
 			//***************************************
 			const results1 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_strain.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}`,
@@ -14076,18 +14073,18 @@ class SilkwormDetailsSearch extends Stanza {
 			});
 			const resultsInformation = unwrapValueFromBinding(results1);
 			if (resultsInformation.length != 0) {
-				resultsInformation.forEach(i => {
+				for( let i of resultsInformation) {
 					let linkedUrls = "";
 					let urls = i.journal.split("<br/>");
-					urls.forEach(url => {
+					for (let url of urls ) {
 						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-					});
-					i.journal = linkedUrls;
-				});
+					}
+					 i.journal = linkedUrls;
+				}
 			}
 
 			const results2 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_reference.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}`,
@@ -14101,7 +14098,7 @@ class SilkwormDetailsSearch extends Stanza {
 			//  卵リソース情報
 			//***************************************
 			const results3 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_egg.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -14110,7 +14107,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsEgg = unwrapValueFromBinding(results3);
 
 			const results4 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -14119,7 +14116,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsEggImage = unwrapValueFromBinding(results4);
 
 			let results5 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -14127,64 +14124,41 @@ class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			let resultsEggPhenotype = unwrapValueFromBinding(results5);
+
 			if (resultsEggPhenotype.length != 0) {
-				resultsEggPhenotype.forEach(p => {
+				for ( let p of resultsEggPhenotype){
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
 					let urls = p.bmpo.split("<br/>");
-					urls.forEach(url => {
-						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.bmpo = linkedUrls;
-							});
+					for ( let url of urls ) {
+						if( url.length != 0 ) {
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-
+					}
+					p.bmpo = linkedUrls;
+					// 関連クラスのURLをリンクに置換
 					linkedUrls = "";
-					urls = p.dpo.split("<br/>");
-					urls.forEach(url => {
-						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.dpo = linkedUrls;
-							});
+					urls = p.related_class.split("<br/>");
+					for ( let url of urls ) {
+						if( url.length != 0 ) {
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-				});
+					}
+					p.related_class = linkedUrls;
+				}
 			}
 
 			let results6 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
 				},
 			});
 			let resultsEggGene = unwrapValueFromBinding(results6);
+
 			if (resultsEggGene.length != 0) {
 				resultsEggGene.forEach(g => {
 					let linkedUrls = "";
@@ -14200,7 +14174,7 @@ class SilkwormDetailsSearch extends Stanza {
 			//  幼虫リソース情報
 			//***************************************
 			const results7 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_larva.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -14209,7 +14183,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsLarva = unwrapValueFromBinding(results7);
 
 			const results8 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -14218,7 +14192,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsLarvaImage = unwrapValueFromBinding(results8);
 
 			let results9 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -14226,58 +14200,34 @@ class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			let resultsLarvaPhenotype = unwrapValueFromBinding(results9);
+
 			if (resultsLarvaPhenotype.length != 0) {
-				resultsLarvaPhenotype.forEach(p => {
+				for( let p of resultsLarvaPhenotype){
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
 					let urls = p.bmpo.split("<br/>");
-					urls.forEach(url => {
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.bmpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-
+					}
+					p.bmpo = linkedUrls;
+					// 関連クラスのURLをリンクに置換
 					linkedUrls = "";
-					urls = p.dpo.split("<br/>");
-					urls.forEach(url => {
+					urls = p.related_class.split("<br/>");
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.dpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-				});
+					}
+					p.related_class = linkedUrls;
+				}
 			}
 
 			let results10 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_feeding_ability.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -14285,11 +14235,12 @@ class SilkwormDetailsSearch extends Stanza {
 				},
 			});
 			let resultsLarvaFeeding = unwrapValueFromBinding(results10);
+
 			if (resultsLarvaFeeding.lengh != 0) {
-				resultsLarvaFeeding.forEach(f => {
+				for ( let f of resultsLarvaFeeding) {
 					let linkedUrls = "";
 					let urls = f.bmpo.split("<br/>");
-					urls.forEach(url => {
+					for (let url of urls) {
 						if( url.length != 0 ){
 							// BioPortalより各オントロジーの prefLabelを取得
 							fetch( bmpo + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
@@ -14297,231 +14248,212 @@ class SilkwormDetailsSearch extends Stanza {
 								return response.json();
 							})
 							.then(result => {
-//								console.log(result.prefLabel);
 								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
 								f.bmpo = linkedUrls;
 							});
 						}
-					});
-
-				});
+					}
+				}
 			}
 
 			let results11 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: 'http://133.39.75.125:8890/sparql/',
+				template: 'stanza_larval_period.hbs',
+				parameters: {
+					id		: `${this.params['id']}_larva`,
+					language: `${this.params['language']}`,
+				},
+			});
+			let resultsLarvalPeriod = unwrapValueFromBinding(results11);
+
+			if (resultsLarvalPeriod.lengh != 0) {
+				for ( let f of resultsLarvalPeriod) {
+					let linkedUrls = "";
+					let urls = f.bmpo.split("<br/>");
+					for (let url of urls) {
+						if( url.length != 0 ){
+							// BioPortalより各オントロジーの prefLabelを取得
+							fetch( bmpo + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
+							.then(response =>  {
+								return response.json();
+							})
+							.then(result => {
+								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
+								f.bmpo = linkedUrls;
+							});
+						}
+					}
+				}
+			}
+
+			let results12 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
 				},
 			});
-			let resultsLarvaGene = unwrapValueFromBinding(results11);
+			let resultsLarvaGene = unwrapValueFromBinding(results12);
+
 			if (resultsLarvaGene.length != 0) {
-				resultsLarvaGene.forEach(g => {
+				for (let g of resultsLarvaGene) {
 					let linkedUrls = "";
 					let urls = g.url.split("<br/>");
-					urls.forEach(url => {
+					for(let url of urls) {
 						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-					});
+					}
 					g.url = linkedUrls;
-				});
+				}
 			}
 
 			//***************************************
 			//  蛹リソース情報
 			//***************************************
-			const results12 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			const results13 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_pupa.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
-			const resultsPupa = unwrapValueFromBinding(results12);
+			const resultsPupa = unwrapValueFromBinding(results13);
 
-			const results13 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			const results14 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
-			const resultsPupaImage = unwrapValueFromBinding(results13);
+			const resultsPupaImage = unwrapValueFromBinding(results14);
 
-			let results14 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			let results15 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 					language: `${this.params['language']}`,
 				},
 			});
-			let resultsPupaPhenotype = unwrapValueFromBinding(results14);
+			let resultsPupaPhenotype = unwrapValueFromBinding(results15);
+
 			if (resultsPupaPhenotype.length != 0) {
-				resultsPupaPhenotype.forEach(p => {
+				for( let p of resultsPupaPhenotype){
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
 					let urls = p.bmpo.split("<br/>");
-					urls.forEach(url => {
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.bmpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-
+					}
+					p.bmpo = linkedUrls;
+					// 関連クラスのURLをリンクに置換
 					linkedUrls = "";
-					urls = p.dpo.split("<br/>");
-					urls.forEach(url => {
+					urls = p.related_class.split("<br/>");
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.dpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-				});
+					}
+					p.related_class = linkedUrls;
+				}
 			}
 
-			let results15 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			let results16 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
-			let resultsPupaGene = unwrapValueFromBinding(results15);
+			let resultsPupaGene = unwrapValueFromBinding(results16);
+
 			if (resultsPupaGene.length != 0) {
-				resultsPupaGene.forEach(g => {
+				for (let g of resultsPupaGene) {
 					let linkedUrls = "";
 					let urls = g.url.split("<br/>");
-					urls.forEach(url => {
+					for ( let url of urls ) {
 						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-					});
+					}
 					g.url = linkedUrls;
-				});
+				}
 			}
 
 			//***************************************
 			//  成虫リソース情報
 			//***************************************
-			const results16 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			const results17 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_adult.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
-			const resultsAdult = unwrapValueFromBinding(results16);
+			const resultsAdult = unwrapValueFromBinding(results17);
 
-			const results17 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			const results18 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
-			const resultsAdultImage = unwrapValueFromBinding(results17);
+			const resultsAdultImage = unwrapValueFromBinding(results18);
 
-			let results18 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			let results19 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 					language: `${this.params['language']}`,
 				},
 			});
-			let resultsAdultPhenotype = unwrapValueFromBinding(results18);
+			let resultsAdultPhenotype = unwrapValueFromBinding(results19);
 			if (resultsAdultPhenotype.length != 0) {
-				resultsAdultPhenotype.forEach(p => {
+				for( let p of resultsAdultPhenotype){
+					// bmpoのURLをリンクに置換
 					let linkedUrls = "";
 					let urls = p.bmpo.split("<br/>");
-					urls.forEach(url => {
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.bmpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-
+					}
+					p.bmpo = linkedUrls;
+					// 関連クラスのURLをリンクに置換
 					linkedUrls = "";
-					urls = p.dpo.split("<br/>");
-					urls.forEach(url => {
+					urls = p.related_class.split("<br/>");
+					for ( let url of urls ) {
 						if( url.length != 0 ){
-							let classUrl = "";
-							if( url.match(/BMPO/)){
-								classUrl = bmpo;
-							} else {
-								classUrl = dpo;
-							}
-							// BioPortalより各オントロジーの prefLabelを取得
-							fetch( classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6')
-							.then(response =>  {
-								return response.json();
-							})
-							.then(result => {
-//								console.log(result.prefLabel);
-								linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + result.prefLabel + ")";
-								p.dpo = linkedUrls;
-							});
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
 						}
-					});
-				});
+					}
+					p.related_class = linkedUrls;
+				}
 			}
 
-			let results19 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+			let results20 = await this.query({
+				endpoint: 'http://133.39.75.125:8890/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
 				},
 			});
-			let resultsAdultGene = unwrapValueFromBinding(results19);
+			let resultsAdultGene = unwrapValueFromBinding(results20);
 			if (resultsAdultGene.length != 0) {
-				resultsAdultGene.forEach(g => {
+				for (let g of resultsAdultGene) {
 					let linkedUrls = "";
 					let urls = g.url.split("<br/>");
-					urls.forEach(url => {
+					for ( let url of urls ) {
 						linkedUrls = linkedUrls + "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url);
-					});
+					}
 					g.url = linkedUrls;
-				});
+				}
 			}
 
 
@@ -14540,6 +14472,7 @@ class SilkwormDetailsSearch extends Stanza {
 					larva_image		: resultsLarvaImage,
 					larva_phenotype	: resultsLarvaPhenotype,
 					larva_feeding	: resultsLarvaFeeding,
+					larva_period	: resultsLarvalPeriod,
 					larva_gene		: resultsLarvaGene,
 
 					pupa			: resultsPupa[0],
@@ -14563,6 +14496,38 @@ class SilkwormDetailsSearch extends Stanza {
 	}
 }
 
+//***************************************
+// Bioportalからラベル取得用URL
+//***************************************
+const dpo = 'https://data.bioontology.org/ontologies/DPO/classes/';
+const bmpo = 'https://data.bioontology.org/ontologies/BMPO/classes/';
+const wb = 'https://data.bioontology.org/ontologies/WB-PHENOTYPE/classes/';
+
+//***************************************
+// オントロジークラスURIからリンクを生成し返す
+// Tartget: BMPO, DPO(FBcv), WB-PHENOTYPE
+//***************************************
+ async function replaceToLink(url){
+
+	let classUrl = "";
+	let linkedUrl = "";
+
+	if( url.match(/BMPO/)){
+		classUrl = bmpo;
+	} else if(url.match(/FBcv/)){
+		classUrl = dpo;
+	} else {
+		classUrl = wb;
+	}
+
+	// BioPortalより各オントロジーの prefLabelを取得
+	const response = await fetch(classUrl + encodeURIComponent( url ) + '?apikey=648534f4-d57a-4b36-b1df-257d79071df6');
+	const json = await response.json();
+	linkedUrl = "<div><a href=\"URL\" target=\"_blank\">URL</a></div>".replace(/URL/g, url) + "(" + json.prefLabel + ")";
+
+	return linkedUrl;
+}
+
 var stanzaModule = /*#__PURE__*/Object.freeze({
     __proto__: null,
     'default': SilkwormDetailsSearch
@@ -14572,8 +14537,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "silkworm-details-search",
-	"stanza:label": "Silkworm details search",
+	"@id": "silkworm_details_search",
+	"stanza:label": "Silkworm Details Search",
 	"stanza:definition": "",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
@@ -14743,7 +14708,7 @@ var templates = [
     + "</td>\n			<td>"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n			<td>"
-    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"dpo") : stack1), depth0)) != null ? stack1 : "")
+    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"related_class") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n			<td>"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"reference") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
@@ -14777,7 +14742,7 @@ var templates = [
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"url") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
 },"16":function(container,depth0,helpers,partials,data,blockParams) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
@@ -14785,34 +14750,14 @@ var templates = [
     };
 
   return "	<table class=\"table table-sm table-striped table-bordered table-larva\">\n		<thead class=\"thead-dark\">\n			<th colspan=\"9\"><h4>Larva</h4></th>\n		</thead>\n		<tr>\n			<th colspan=\"1\" class=\"sub-title\">Resource State</th>\n			<td colspan=\"8\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"resource_state") : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"resource_state") : stack1), depth0))
     + "</td>\n		</tr>\n		<tr>\n			<th colspan=\"1\" class=\"sub-title\">Image</th>\n			<td colspan=\"8\">\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"larva_image") : depth0),{"name":"if","hash":{},"fn":container.program(17, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":131,"column":2},"end":{"line":135,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"larva_image") : depth0),{"name":"if","hash":{},"fn":container.program(17, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":131,"column":2},"end":{"line":135,"column":9}}})) != null ? stack1 : "")
     + "			</td>\n		</tr>\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"larva_phenotype") : depth0),{"name":"if","hash":{},"fn":container.program(20, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":138,"column":2},"end":{"line":156,"column":9}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"larva_feeding") : depth0),{"name":"if","hash":{},"fn":container.program(23, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":157,"column":2},"end":{"line":173,"column":9}}})) != null ? stack1 : "")
-    + "		<thead class=\"thead-dark\">\n			<th colspan=\"9\">Larva Period : "
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"larva_period") : stack1), depth0))
-    + " (hour)</th>\n		</thead>\n		<tr>\n			<th>1st instar</th>\n			<th>1st diapause</th>\n			<th>2nd instar</th>\n			<th>2nd diapause</th>\n			<th>3th instar</th>\n			<th>3th diapause</th>\n			<th>4th instar</th>\n			<th>4th diapause</th>\n			<th>5th instar</th>\n		</tr>\n		<tr>\n			<td>"
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"1st_instar") : stack1), depth0))
-    + "</td>\n			<td>"
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"1st_diapause") : stack1), depth0))
-    + "</td>\n			<td>"
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"2nd_instar") : stack1), depth0))
-    + "</td>\n			<td>"
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"2nd_diapause") : stack1), depth0))
-    + "</td>\n			<td>"
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"3th_instar") : stack1), depth0))
-    + "</td>\n			<td>"
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"3th_diapause") : stack1), depth0))
-    + "</td>\n			<td>"
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"4th_instar") : stack1), depth0))
-    + "</td>\n			<td>"
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"4th_diapause") : stack1), depth0))
-    + "</td>\n			<td>"
-    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"5th_instar") : stack1), depth0))
-    + "</td>\n		</tr>\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"larva_gene") : depth0),{"name":"if","hash":{},"fn":container.program(26, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":199,"column":2},"end":{"line":217,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"larva_phenotype") : depth0),{"name":"if","hash":{},"fn":container.program(20, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":138,"column":2},"end":{"line":156,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"larva_feeding") : depth0),{"name":"if","hash":{},"fn":container.program(23, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":157,"column":2},"end":{"line":173,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"larva_period") : depth0),{"name":"if","hash":{},"fn":container.program(26, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":174,"column":2},"end":{"line":190,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"larva_gene") : depth0),{"name":"if","hash":{},"fn":container.program(29, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":191,"column":2},"end":{"line":209,"column":9}}})) != null ? stack1 : "")
     + "	</table>\n";
 },"17":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -14857,7 +14802,7 @@ var templates = [
     + "</td>\n			<td colspan=\"2\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n			<td colspan=\"2\">"
-    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"dpo") : stack1), depth0)) != null ? stack1 : "")
+    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"related_class") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n			<td colspan=\"4\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"reference") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
@@ -14894,9 +14839,34 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=9\">Gene</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Gene ID</th>\n			<th colspan=\"2\">Name</th>\n			<th colspan=\"2\">Synonym</th>\n			<th colspan=\"4\">Reference</th>\n		</tr>\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"larva_gene") : depth0),{"name":"each","hash":{},"fn":container.program(27, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":209,"column":3},"end":{"line":216,"column":12}}})) != null ? stack1 : "");
+  return "		<thead class=\"thead-dark\">\n			<th colspan=\"9\">Larval Period</th>\n		</thead>\n		<tr>\n			<th colspan=\"3\">Feeding ability</th>\n			<th colspan=\"3\">BMPO</th>\n			<th colspan=\"3\">Description</th>\n		</tr>\n"
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"larva_period") : depth0),{"name":"each","hash":{},"fn":container.program(27, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":183,"column":3},"end":{"line":189,"column":12}}})) != null ? stack1 : "");
 },"27":function(container,depth0,helpers,partials,data,blockParams) {
+    var stack1, alias1=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "		<tr>\n			<td colspan=\"3\">"
+    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"label") : stack1), depth0)) != null ? stack1 : "")
+    + "</td>\n			<td colspan=\"3\">"
+    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
+    + "</td>\n			<td colspan=\"3\">"
+    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"description") : stack1), depth0)) != null ? stack1 : "")
+    + "</td>\n		</tr>\n";
+},"29":function(container,depth0,helpers,partials,data,blockParams) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "		<thead class=\"thead-dark\">\n			<th colspan=9\">Gene</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Gene ID</th>\n			<th colspan=\"2\">Name</th>\n			<th colspan=\"2\">Synonym</th>\n			<th colspan=\"4\">Reference</th>\n		</tr>\n"
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"larva_gene") : depth0),{"name":"each","hash":{},"fn":container.program(30, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":201,"column":3},"end":{"line":208,"column":12}}})) != null ? stack1 : "");
+},"30":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -14915,7 +14885,7 @@ var templates = [
     + "</td>\n			<td colspan=\"4\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"url") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
-},"29":function(container,depth0,helpers,partials,data,blockParams) {
+},"32":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -14926,12 +14896,12 @@ var templates = [
   return "	<table class=\"table table-sm table-striped table-bordered table-pupa\">\n		<thead class=\"thead-dark\">\n			<th colspan=\"4\"><h4>Pupa</h4></th>\n		</thead>\n		<tr>\n			<th colspan=\"1\" class=\"sub-title\">Resource State</th>\n			<td colspan=\"3\">"
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"pupa") : depth0)) != null ? lookupProperty(stack1,"resource_state") : stack1), depth0))
     + "</td>\n		</tr>\n		<tr>\n			<th colspan=\"1\" class=\"sub-title\">Image</th>\n			<td colspan=\"3\">\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"pupa_image") : depth0),{"name":"if","hash":{},"fn":container.program(30, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":236,"column":2},"end":{"line":240,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"pupa_image") : depth0),{"name":"if","hash":{},"fn":container.program(33, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":228,"column":2},"end":{"line":232,"column":9}}})) != null ? stack1 : "")
     + "\n			</td>\n		</tr>\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"pupa_phenotype") : depth0),{"name":"if","hash":{},"fn":container.program(33, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":244,"column":2},"end":{"line":262,"column":9}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"pupa_gene") : depth0),{"name":"if","hash":{},"fn":container.program(36, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":263,"column":2},"end":{"line":281,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"pupa_phenotype") : depth0),{"name":"if","hash":{},"fn":container.program(36, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":236,"column":2},"end":{"line":254,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"pupa_gene") : depth0),{"name":"if","hash":{},"fn":container.program(39, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":255,"column":2},"end":{"line":273,"column":9}}})) != null ? stack1 : "")
     + "	</table>\n";
-},"30":function(container,depth0,helpers,partials,data,blockParams) {
+},"33":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -14939,8 +14909,8 @@ var templates = [
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"pupa_image") : depth0),{"name":"each","hash":{},"fn":container.program(31, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":237,"column":3},"end":{"line":239,"column":12}}})) != null ? stack1 : "");
-},"31":function(container,depth0,helpers,partials,data,blockParams) {
+  return ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"pupa_image") : depth0),{"name":"each","hash":{},"fn":container.program(34, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":229,"column":3},"end":{"line":231,"column":12}}})) != null ? stack1 : "");
+},"34":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -14951,7 +14921,7 @@ var templates = [
   return "				<img width=\"120px\" src=\""
     + container.escapeExpression(container.lambda(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"image") : stack1), depth0))
     + "\">\n";
-},"33":function(container,depth0,helpers,partials,data,blockParams) {
+},"36":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -14960,8 +14930,8 @@ var templates = [
     };
 
   return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Phenotype</th>\n		</thead>\n		<tr>\n			<th>Phenotype</th>\n			<th>BMPO</th>\n			<th>seeAlso</th>\n			<th>Reference</th>\n		</tr>\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"pupa_phenotype") : depth0),{"name":"each","hash":{},"fn":container.program(34, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":254,"column":3},"end":{"line":261,"column":12}}})) != null ? stack1 : "");
-},"34":function(container,depth0,helpers,partials,data,blockParams) {
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"pupa_phenotype") : depth0),{"name":"each","hash":{},"fn":container.program(37, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":246,"column":3},"end":{"line":253,"column":12}}})) != null ? stack1 : "");
+},"37":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -14974,11 +14944,11 @@ var templates = [
     + "</td>\n			<td>"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n			<td>"
-    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"dpo") : stack1), depth0)) != null ? stack1 : "")
+    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"related_class") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n			<td>"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"reference") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
-},"36":function(container,depth0,helpers,partials,data,blockParams) {
+},"39":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -14987,8 +14957,8 @@ var templates = [
     };
 
   return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Gene</th>\n		</thead>\n		<tr>\n			<th>Gene ID</th>\n			<th>Name</th>\n			<th>Synonym</th>\n			<th>Reference</th>\n		</tr>\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"pupa_gene") : depth0),{"name":"each","hash":{},"fn":container.program(37, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":273,"column":3},"end":{"line":280,"column":12}}})) != null ? stack1 : "");
-},"37":function(container,depth0,helpers,partials,data,blockParams) {
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"pupa_gene") : depth0),{"name":"each","hash":{},"fn":container.program(40, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":265,"column":3},"end":{"line":272,"column":12}}})) != null ? stack1 : "");
+},"40":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -15007,7 +14977,7 @@ var templates = [
     + "</td>\n			<td>"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"url") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
-},"39":function(container,depth0,helpers,partials,data,blockParams) {
+},"42":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -15018,12 +14988,12 @@ var templates = [
   return "	<table class=\"table table-sm table-striped table-bordered table-adult\">\n		<thead class=\"thead-dark\">\n			<th colspan=\"4\"><h4>Adult</h4></th>\n		</thead>\n		<tr>\n			<th colspan=\"1\" class=\"sub-title\">Resource State</th>\n			<td colspan=\"3\">"
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"adult") : depth0)) != null ? lookupProperty(stack1,"resource_state") : stack1), depth0))
     + "</td>\n		</tr>\n		<tr>\n			<th colspan=\"1\" class=\"sub-title\">Image</th>\n			<td colspan=\"3\">\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult_image") : depth0),{"name":"if","hash":{},"fn":container.program(40, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":300,"column":2},"end":{"line":304,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult_image") : depth0),{"name":"if","hash":{},"fn":container.program(43, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":292,"column":2},"end":{"line":296,"column":9}}})) != null ? stack1 : "")
     + "			</td>\n		</tr>\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult_phenotype") : depth0),{"name":"if","hash":{},"fn":container.program(43, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":307,"column":2},"end":{"line":325,"column":9}}})) != null ? stack1 : "")
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult_gene") : depth0),{"name":"if","hash":{},"fn":container.program(46, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":326,"column":2},"end":{"line":344,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult_phenotype") : depth0),{"name":"if","hash":{},"fn":container.program(46, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":299,"column":2},"end":{"line":317,"column":9}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult_gene") : depth0),{"name":"if","hash":{},"fn":container.program(49, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":318,"column":2},"end":{"line":336,"column":9}}})) != null ? stack1 : "")
     + "	</table>\n";
-},"40":function(container,depth0,helpers,partials,data,blockParams) {
+},"43":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -15031,8 +15001,8 @@ var templates = [
         return undefined
     };
 
-  return ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"adult_image") : depth0),{"name":"each","hash":{},"fn":container.program(41, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":301,"column":3},"end":{"line":303,"column":12}}})) != null ? stack1 : "");
-},"41":function(container,depth0,helpers,partials,data,blockParams) {
+  return ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"adult_image") : depth0),{"name":"each","hash":{},"fn":container.program(44, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":293,"column":3},"end":{"line":295,"column":12}}})) != null ? stack1 : "");
+},"44":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -15043,7 +15013,7 @@ var templates = [
   return "				<img width=\"120px\" src=\""
     + container.escapeExpression(container.lambda(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"image") : stack1), depth0))
     + "\">\n";
-},"43":function(container,depth0,helpers,partials,data,blockParams) {
+},"46":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -15052,8 +15022,8 @@ var templates = [
     };
 
   return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Phenotype</th>\n		</thead>\n		<tr>\n			<th>Phenotype</th>\n			<th>BMPO</th>\n			<th>seeAlso</th>\n			<th>Reference</th>\n		</tr>\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"adult_phenotype") : depth0),{"name":"each","hash":{},"fn":container.program(44, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":317,"column":3},"end":{"line":324,"column":12}}})) != null ? stack1 : "");
-},"44":function(container,depth0,helpers,partials,data,blockParams) {
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"adult_phenotype") : depth0),{"name":"each","hash":{},"fn":container.program(47, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":309,"column":3},"end":{"line":316,"column":12}}})) != null ? stack1 : "");
+},"47":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -15066,11 +15036,11 @@ var templates = [
     + "</td>\n			<td>"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n			<td>"
-    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"dpo") : stack1), depth0)) != null ? stack1 : "")
+    + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"related_class") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n			<td>"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"reference") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
-},"46":function(container,depth0,helpers,partials,data,blockParams) {
+},"49":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -15079,8 +15049,8 @@ var templates = [
     };
 
   return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Gene</th>\n		</thead>\n		<tr>\n			<th>Gene ID</th>\n			<th>Name</th>\n			<th>Synonym</th>\n			<th>Reference</th>\n		</tr>\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"adult_gene") : depth0),{"name":"each","hash":{},"fn":container.program(47, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":336,"column":3},"end":{"line":343,"column":12}}})) != null ? stack1 : "");
-},"47":function(container,depth0,helpers,partials,data,blockParams) {
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"adult_gene") : depth0),{"name":"each","hash":{},"fn":container.program(50, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":328,"column":3},"end":{"line":335,"column":12}}})) != null ? stack1 : "");
+},"50":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
@@ -15112,11 +15082,11 @@ var templates = [
     + "\n	<!--\n		卵リソース情報\n	-->\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"egg") : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":56,"column":1},"end":{"line":114,"column":8}}})) != null ? stack1 : "")
     + "\n	<!--\n		幼虫リソース情報\n	-->\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"larva") : depth0),{"name":"if","hash":{},"fn":container.program(16, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":119,"column":1},"end":{"line":219,"column":8}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"larva") : depth0),{"name":"if","hash":{},"fn":container.program(16, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":119,"column":1},"end":{"line":211,"column":8}}})) != null ? stack1 : "")
     + "\n	<!--\n		蛹リソース情報\n	-->\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"pupa") : depth0),{"name":"if","hash":{},"fn":container.program(29, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":224,"column":1},"end":{"line":283,"column":8}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"pupa") : depth0),{"name":"if","hash":{},"fn":container.program(32, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":216,"column":1},"end":{"line":275,"column":8}}})) != null ? stack1 : "")
     + "\n	<!--\n		成虫リソース情報\n	-->\n"
-    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult") : depth0),{"name":"if","hash":{},"fn":container.program(39, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":288,"column":1},"end":{"line":346,"column":8}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult") : depth0),{"name":"if","hash":{},"fn":container.program(42, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":280,"column":1},"end":{"line":338,"column":8}}})) != null ? stack1 : "")
     + "	<div><a href=\""
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"information") : depth0)) != null ? lookupProperty(stack1,"homepage") : stack1), depth0))
     + "\" target=\"_blank\">Click here to order</a></div>\n\n</div>\n";
@@ -15129,9 +15099,9 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\r\nPREFIX sio: <http://semanticscience.org/resource/>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\r\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\r\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\r\nPREFIX dcterms: <http://purl.org/dc/terms/>\r\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\r\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\nPREFIX org: <http://www.w3.org/ns/org#>\r\nPREFIX bibo: <http://purl.org/ontology/bibo/>\r\nPREFIX obo: <http://purl.obolibrary.org/obo/>\r\n\r\n\r\nSELECT\r\n	?name\r\n	?resource_state\r\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm>\r\nWHERE {\r\n	?Resource a brso:BiologicalResourceAdult ;\r\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":21,"column":22},"end":{"line":21,"column":28}}}) : helper))) != null ? stack1 : "")
-    + "\" ;\r\n		rdfs:label ?name ;\r\n		brso:resource_state _:b_resource_state .\r\n\r\n	_:b_resource_state a brso:ResourceState ;\r\n		rdfs:label ?resource_state .\r\n}\r\nLIMIT 1\r\n";
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <http://localhost:8890/silkworm>\nWHERE {\n	?Resource a brso:BiologicalResourceAdult ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\n		rdfs:label ?name ;\n		brso:resource_state _:b_resource_state .\n\n	_:b_resource_state a brso:ResourceState ;\n		rdfs:label ?resource_state .\n}\nLIMIT 1\n";
 },"useData":true}],
 ["stanza_egg.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15141,9 +15111,9 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\r\nPREFIX sio: <http://semanticscience.org/resource/>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\r\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\r\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\r\nPREFIX dcterms: <http://purl.org/dc/terms/>\r\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\r\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\nPREFIX org: <http://www.w3.org/ns/org#>\r\nPREFIX bibo: <http://purl.org/ontology/bibo/>\r\nPREFIX obo: <http://purl.obolibrary.org/obo/>\r\n\r\n\r\nSELECT\r\n	?name\r\n	?resource_state\r\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm>\r\nWHERE {\r\n	?Resource a brso:BiologicalResourceEgg ;\r\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":21,"column":22},"end":{"line":21,"column":28}}}) : helper))) != null ? stack1 : "")
-    + "\" ;\r\n		rdfs:label ?name ;\r\n		brso:resource_state _:b_resource_state .\r\n\r\n	_:b_resource_state a brso:ResourceState ;\r\n		rdfs:label ?resource_state .\r\n}\r\nLIMIT 1\r\n";
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <http://localhost:8890/silkworm>\nWHERE {\n	?Resource a brso:BiologicalResourceEgg ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\n		rdfs:label ?name ;\n		brso:resource_state _:b_resource_state .\n\n	_:b_resource_state a brso:ResourceState ;\n		rdfs:label ?resource_state .\n}\nLIMIT 1\n";
 },"useData":true}],
 ["stanza_feeding_ability.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15153,13 +15123,13 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\r\nPREFIX sio: <http://semanticscience.org/resource/>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\r\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\r\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\r\nPREFIX dcterms: <http://purl.org/dc/terms/>\r\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\r\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\nPREFIX org: <http://www.w3.org/ns/org#>\r\nPREFIX bibo: <http://purl.org/ontology/bibo/>\r\nPREFIX obo: <http://purl.obolibrary.org/obo/>\r\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\r\n\r\n\r\nSELECT distinct\r\n	?label\r\n	(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\r\n	?description\r\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm>\r\nWHERE {\r\n\r\n	?Resource dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":23,"column":31},"end":{"line":23,"column":37}}}) : helper))) != null ? stack1 : "")
-    + "\" ;\r\n		sio:SIO_001279 _:b_phenotype .\r\n\r\n	_:b_phenotype a sio:SIO_010056 ;\r\n		rdfs:label ?label .\r\n	filter(LANG(?label) = '"
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":28,"column":24},"end":{"line":28,"column":36}}}) : helper))) != null ? stack1 : "")
-    + "')\r\n\r\n	OPTIONAL{\r\n		_:b_phenotype sio:SIO_000255 ?bmpo.\r\n	}\r\n	OPTIONAL{\r\n		_:b_phenotype dcterms:description ?description.\r\n		filter(LANG(?description) = '"
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":35,"column":31},"end":{"line":35,"column":43}}}) : helper))) != null ? stack1 : "")
-    + "')\r\n	}\r\n\r\n}\r\n\r\n";
+  return "DEFINE sql:select-option \"order\"\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\n\nSELECT distinct\n	?label\n	(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\n	?description\nFROM <http://localhost:8890/silkworm>\nWHERE {\n	?Resource a brso:BiologicalResourceLarva ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":14,"column":22},"end":{"line":14,"column":28}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\n		sio:SIO_001279 _:b_phenotype .\n\n	_:b_phenotype a sio:SIO_010056 ;\n		rdfs:label ?label_en ;\n		rdfs:label ?label .\n\n	filter(LANG(?label_en) = 'en')\n	?label_en bif:contains '\"artificial diets preference\"'.\n\n	filter(LANG(?label) = '"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":24,"column":24},"end":{"line":24,"column":36}}}) : helper))) != null ? stack1 : "")
+    + "')\n\n	OPTIONAL{\n		_:b_phenotype sio:SIO_000255 ?bmpo.\n	}\n	OPTIONAL{\n		_:b_phenotype dcterms:description ?description.\n		filter(LANG(?description) = '"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":31,"column":31},"end":{"line":31,"column":43}}}) : helper))) != null ? stack1 : "")
+    + "')\n	}\n}\n\n";
 },"useData":true}],
 ["stanza_gene.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15169,9 +15139,9 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\r\nPREFIX sio: <http://semanticscience.org/resource/>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\r\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\r\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\r\nPREFIX dcterms: <http://purl.org/dc/terms/>\r\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\r\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\nPREFIX org: <http://www.w3.org/ns/org#>\r\nPREFIX bibo: <http://purl.org/ontology/bibo/>\r\nPREFIX obo: <http://purl.obolibrary.org/obo/>\r\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\r\n\r\n\r\nSELECT distinct\r\n	?id\r\n	?name\r\n	(group_concat(distinct ?synonym;separator = \", \") AS ?synonym)\r\n	(group_concat(distinct ?url;separator = \"<br/>\") AS ?url)\r\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm>\r\nWHERE {\r\n	?Resource dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":23,"column":31},"end":{"line":23,"column":37}}}) : helper))) != null ? stack1 : "")
-    + "\" ;\r\n		brso:genomic_feature _:b_genomic_feature .\r\n\r\n	_:b_genomic_feature a brso:GenomicFeature ;\r\n		brso:has_genomic_segment _:b_genomic_segment .\r\n\r\n	_:b_genomic_segment a brso:GenomicSegment ;\r\n		dcterms:identifier ?id ;\r\n		skos:altLabel ?synonym ;\r\n		rdfs:seeAlso ?url .\r\n\r\n	OPTIONAL{\r\n		_:b_genomic_segment rdfs:label ?name.\r\n	}\r\n}\r\n\r\n";
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT distinct\n	?id\n	?name\n	(group_concat(distinct ?synonym;separator = \", \") AS ?synonym)\n	(group_concat(distinct ?url;separator = \"<br/>\") AS ?url)\nFROM <http://localhost:8890/silkworm>\nWHERE {\n	?Resource dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":13,"column":31},"end":{"line":13,"column":37}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\n		brso:genomic_feature _:b_genomic_feature .\n\n	_:b_genomic_feature a brso:GenomicFeature ;\n		brso:has_genomic_segment _:b_genomic_segment .\n\n	_:b_genomic_segment a brso:GenomicSegment ;\n		dcterms:identifier ?id ;\n		skos:altLabel ?synonym ;\n		rdfs:seeAlso ?url .\n\n	OPTIONAL{\n		_:b_genomic_segment rdfs:label ?name.\n	}\n}\n\n";
 },"useData":true}],
 ["stanza_image.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15181,9 +15151,9 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\r\nPREFIX sio: <http://semanticscience.org/resource/>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\r\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\r\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\r\nPREFIX dcterms: <http://purl.org/dc/terms/>\r\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\r\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\nPREFIX org: <http://www.w3.org/ns/org#>\r\nPREFIX bibo: <http://purl.org/ontology/bibo/>\r\nPREFIX obo: <http://purl.obolibrary.org/obo/>\r\n\r\n\r\nSELECT distinct\r\n	?image\r\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm>\r\nWHERE {\r\n	?Resource dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":19,"column":31},"end":{"line":19,"column":37}}}) : helper))) != null ? stack1 : "")
-    + "\" ;\r\n		foaf:depiction ?image .\r\n}\r\n";
+  return "PREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\n\nSELECT distinct\n	?image\nFROM <http://localhost:8890/silkworm>\nWHERE {\n	?Resource dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":8,"column":31},"end":{"line":8,"column":37}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\n		foaf:depiction ?image .\n}\n";
 },"useData":true}],
 ["stanza_larva.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15193,21 +15163,25 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\r\nPREFIX sio: <http://semanticscience.org/resource/>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\r\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\r\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\r\nPREFIX dcterms: <http://purl.org/dc/terms/>\r\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\r\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\nPREFIX org: <http://www.w3.org/ns/org#>\r\nPREFIX bibo: <http://purl.org/ontology/bibo/>\r\nPREFIX obo: <http://purl.obolibrary.org/obo/>\r\nPREFIX bmpo: <http://purl.bioontology.org/ontology/BMPO/>\r\n\r\nSELECT\r\n	?name\r\n	?resource_state\r\n	?larva_period\r\n	?1st_instar\r\n	?1st_diapause\r\n	?2nd_instar\r\n	?2nd_diapause\r\n	?3th_instar\r\n	?3th_diapause\r\n	?4th_instar\r\n	?4th_diapause\r\n	?5th_instar\r\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm>\r\nWHERE {\r\n	?Resource a brso:BiologicalResourceLarva ;\r\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":31,"column":22},"end":{"line":31,"column":28}}}) : helper))) != null ? stack1 : "")
-    + "\" ;\r\n		rdfs:label ?name ;\r\n		brso:resource_state _:b_resource_state .\r\n\r\n	_:b_resource_state a brso:ResourceState ;\r\n		rdfs:label ?resource_state .\r\n\r\n	OPTIONAL {\r\n		?Resource sio:SIO_001279 _:b_larva_period.\r\n\r\n		_:b_larva_period a bmpo:LarvaPeriod ;\r\n			sio:SIO_000300 ?larva_period ;\r\n			bmpo:1st_instar _:b_1st_instar ;\r\n			bmpo:1st_diapause _:b_1st_diapause ;\r\n			bmpo:2nd_instar _:b_2nd_instar ;\r\n			bmpo:2nd_diapause _:b_2nd_diapause ;\r\n			bmpo:3th_instar _:b_3th_instar ;\r\n			bmpo:3th_diapause _:b_3th_diapause ;\r\n			bmpo:4th_instar _:b_4th_instar ;\r\n			bmpo:4th_diapause _:b_4th_diapause ;\r\n			bmpo:5th_instar _:b_5th_instar .\r\n\r\n		_:b_1st_instar sio:SIO_000300 ?1st_instar .\r\n		_:b_1st_diapause sio:SIO_000300 ?1st_diapause .\r\n		_:b_2nd_instar sio:SIO_000300 ?2nd_instar .\r\n		_:b_2nd_diapause sio:SIO_000300 ?2nd_diapause .\r\n		_:b_3th_instar sio:SIO_000300 ?3th_instar .\r\n		_:b_3th_diapause sio:SIO_000300 ?3th_diapause .\r\n		_:b_4th_instar sio:SIO_000300 ?4th_instar .\r\n		_:b_4th_diapause sio:SIO_000300 ?4th_diapause .\r\n		_:b_5th_instar sio:SIO_000300 ?5th_instar .\r\n	}\r\n}\r\nLIMIT 1\r\n";
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <http://localhost:8890/silkworm>\nWHERE {\n	?Resource a brso:BiologicalResourceLarva ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\n		rdfs:label ?name ;\n		brso:resource_state _:b_resource_state .\n\n	_:b_resource_state a brso:ResourceState ;\n		rdfs:label ?resource_state .\n}\nLIMIT 1\n";
 },"useData":true}],
-["stanza_larva_period.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+["stanza_larval_period.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\r\nPREFIX sio: <http://semanticscience.org/resource/>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\r\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\r\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\r\nPREFIX dcterms: <http://purl.org/dc/terms/>\r\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\r\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\nPREFIX org: <http://www.w3.org/ns/org#>\r\nPREFIX bibo: <http://purl.org/ontology/bibo/>\r\nPREFIX obo: <http://purl.obolibrary.org/obo/>\r\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\r\nPREFIX bmpo: <http://purl.bioontology.org/ontology/BMPO/>\r\n\r\n\r\nSELECT distinct\r\n	?larva_period\r\n	?1st_instar\r\n	?1st_diapause\r\n	?2nd_instar\r\n	?2nd_diapause\r\n	?3th_instar\r\n	?3th_diapause\r\n	?4th_instar\r\n	?4th_diapause\r\n	?5th_instar\r\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm>\r\nWHERE {\r\n\r\n	?Resource a brso:BiologicalResourceLarva ;\r\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":32,"column":22},"end":{"line":32,"column":28}}}) : helper))) != null ? stack1 : "")
-    + "\" ;\r\n		sio:SIO_001279 _:b_larva_period .\r\n\r\n	_:b_larva_period a bmpo:LarvaPeriod ;\r\n		sio:SIO_000300 ?larva_period ;\r\n		bmpo:1st_instar _:b_1st_instar ;\r\n		bmpo:1st_diapause _:b_1st_diapause ;\r\n		bmpo:2nd_instar _:b_2nd_instar ;\r\n		bmpo:2nd_diapause _:b_2nd_diapause ;\r\n		bmpo:3th_instar _:b_3th_instar ;\r\n		bmpo:3th_diapause _:b_3th_diapause ;\r\n		bmpo:4th_instar _:b_4th_instar ;\r\n		bmpo:4th_diapause _:b_4th_diapause ;\r\n		bmpo:5th_instar _:b_5th_instar .\r\n	\r\n	_:b_1st_instar a bmpo:1stInstar ;\r\n		sio:SIO_000300 ?1st_instar .\r\n	_:b_1st_diapause a bmpo:1stDiapause ;\r\n		sio:SIO_000300 ?1st_diapause .\r\n	\r\n	_:b_2nd_instar a bmpo:2ndInstar ;\r\n		sio:SIO_000300 ?2nd_instar .\r\n	_:b_2nd_diapause a bmpo:2ndDiapause ;\r\n		sio:SIO_000300 ?2nd_diapause .\r\n		\r\n	_:b_3th_instar a bmpo:3thInstar ;\r\n		sio:SIO_000300 ?3th_instar .\r\n	_:b_3th_diapause a bmpo:3thDiapause ;\r\n		sio:SIO_000300 ?3th_diapause .\r\n		\r\n	_:b_4th_instar a bmpo:4thInstar ;\r\n		sio:SIO_000300 ?4th_instar .\r\n	_:b_4th_diapause a bmpo:4thDiapause ;\r\n		sio:SIO_000300 ?4th_diapause .\r\n\r\n	_:b_5th_instar a bmpo:5thInstar ;\r\n		sio:SIO_000300 ?5th_instar .\r\n}\r\n\r\n";
+  return "DEFINE sql:select-option \"order\"\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT distinct\n	?label\n	(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\n	?description\nFROM <http://localhost:8890/silkworm>\nWHERE {\n	?Resource a brso:BiologicalResourceLarva ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":13,"column":22},"end":{"line":13,"column":28}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\n		sio:SIO_001279 _:b_phenotype .\n\n	_:b_phenotype a sio:SIO_010056 ;\n		rdfs:label ?label_en ;\n		rdfs:label ?label .\n\n	filter(LANG(?label_en) = 'en')\n	?label_en bif:contains \"'instar period' or 'diapause period'\".\n\n	filter(LANG(?label) = '"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":23,"column":24},"end":{"line":23,"column":36}}}) : helper))) != null ? stack1 : "")
+    + "')\n\n	OPTIONAL{\n		_:b_phenotype sio:SIO_000255 ?bmpo.\n	}\n	OPTIONAL{\n		_:b_phenotype dcterms:description ?description.\n		filter(LANG(?description) = '"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":30,"column":31},"end":{"line":30,"column":43}}}) : helper))) != null ? stack1 : "")
+    + "')\n	}\n}\n\n";
 },"useData":true}],
 ["stanza_phenotype.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15217,13 +15191,13 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX org: <http://www.w3.org/ns/org#>\nPREFIX bibo: <http://purl.org/ontology/bibo/>\nPREFIX obo: <http://purl.obolibrary.org/obo/>\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\n\n\n\nSELECT distinct\n	?label\n	?bmpo\n	?dpo\n	(group_concat(distinct ?reference;separator = \"<br/>\") AS ?reference)\nWHERE{\n	{ SELECT distinct\n			?label\n			(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\n			(group_concat(distinct ?dpo;separator = \"<br/>\") AS ?dpo)\n			?puclication_name\n			?volume\n			?number\n			?starting_page\n			?ending_page\n			?date\n			?url\n			(group_concat(distinct ?author_name;separator = \", \" ) AS ?author_name)\n		WHERE {\n			?Resource dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":36,"column":33},"end":{"line":36,"column":39}}}) : helper))) != null ? stack1 : "")
-    + "\" ;\n				sio:SIO_001279 _:b_phenotype .\n			_:b_phenotype a sio:SIO_010056 ;\n				rdfs:label ?label .\n			filter(LANG(?label) = '')\n\n			OPTIONAL{\n				_:b_phenotype sio:SIO_000255 ?bmpo.\n			}\n			OPTIONAL{\n				_:b_phenotype rdfs:seeAlso ?dpo.\n			}\n			OPTIONAL{\n				_:b_phenotype dcterms:reference _:b_reference .\n\n				_:b_reference a bibo:Article ;\n					prism:publicationName ?puclication_name ;\n					prism:volume ?volume ;\n					prism:number ?number ;\n					prism:startingPage ?starting_page ;\n					prism:endingPage ?ending_page ;\n					dcterms:date ?date ;\n					rdfs:seeAlso ?url .\n				filter(LANG(?puclication_name) = '"
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":59,"column":38},"end":{"line":59,"column":50}}}) : helper))) != null ? stack1 : "")
+  return "PREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX bibo: <http://purl.org/ontology/bibo/>\nPREFIX obo: <http://purl.obolibrary.org/obo/>\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\n\nSELECT distinct\n	?label\n	?bmpo\n	?related_class\n	(group_concat(distinct ?reference;separator = \"<br/>\") AS ?reference)\nFROM <http://localhost:8890/silkworm>\nWHERE{\n	{\n		SELECT distinct\n			?label\n			(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\n			(group_concat(distinct ?related_class;separator = \"<br/>\") AS ?related_class)\n			?puclication_name\n			?volume\n			?number\n			?starting_page\n			?ending_page\n			?date\n			?url\n			(group_concat(distinct ?author_name;separator = \", \" ) AS ?author_name)\n		FROM <http://localhost:8890/silkworm>\n		WHERE {\n			?Resource dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":31,"column":33},"end":{"line":31,"column":39}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\n				sio:SIO_001279 _:b_phenotype .\n			_:b_phenotype a sio:SIO_010056 ;\n				rdfs:label ?label .\n			filter(LANG(?label) = '')\n\n			OPTIONAL{\n				_:b_phenotype sio:SIO_000255 ?bmpo.\n			}\n			OPTIONAL{\n				_:b_phenotype rdfs:seeAlso ?related_class.\n			}\n			OPTIONAL{\n				_:b_phenotype dcterms:reference _:b_reference .\n\n				_:b_reference a bibo:Article ;\n					prism:publicationName ?puclication_name ;\n					prism:volume ?volume ;\n					prism:number ?number ;\n					prism:startingPage ?starting_page ;\n					prism:endingPage ?ending_page ;\n					dcterms:date ?date ;\n					rdfs:seeAlso ?url .\n				filter(LANG(?puclication_name) = '"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":54,"column":38},"end":{"line":54,"column":50}}}) : helper))) != null ? stack1 : "")
     + "')\n				OPTIONAL{\n					_:b_reference dc:creater _:b_author.\n\n					_:b_author a foaf:Person;\n						foaf:name ?author_name .\n					filter(LANG(?author_name) = '"
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":65,"column":34},"end":{"line":65,"column":46}}}) : helper))) != null ? stack1 : "")
-    + "')\n				}\n			}\n\n		}\n	}\n	# author_name が empty の場合 \"-\" とする\n	BIND(BOUND(?author_name) && strlen(?author_name) >0 as ?an_notEmpty)\n	BIND( if (?an_notEmpty,\n			?author_name,\n			\"-\")\n		 as ?author_name )\n\n	# date が empty の場合 \"-\" とする\n	BIND(BOUND(?date) && strlen(?date) >0 as ?dt_notEmpty)\n	BIND( if (?dt_notEmpty,\n			?date,\n			\"-\")\n		 as ?date )\n\n	# puclication_name が empty でない場合、文字連結して reference を作成\n	BIND(BOUND(?puclication_name) && strlen(?puclication_name) >0 as ?pn_notEmpty)\n	BIND( if (?pn_notEmpty,\n			CONCAT( ?author_name, \", \", \" (\",\n				?date,\n				\"). \",\n				?puclication_name,\n				\", \",\n				?volume,\n				\", \",\n				?number,\n				\", [\",\n				?starting_page,\n				\"-\",\n				?ending_page,\n				\"]. \",\n				\"<a href='\",\n				?url,\n				\"'>\",\n				?url,\n				\"</a>\"\n				),\n			\"\")\n		 as ?reference )\n\n}\n";
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":60,"column":34},"end":{"line":60,"column":46}}}) : helper))) != null ? stack1 : "")
+    + "')\n				}\n			}\n\n		}\n	}\n\n	# author_name が empty の場合 \"-\" とする\n	BIND(BOUND(?author_name) && strlen(?author_name) >0 as ?an_notEmpty)\n	BIND( if (?an_notEmpty,\n			?author_name,\n			\"-\")\n		 as ?author_name )\n\n	# date が empty の場合 \"-\" とする\n	BIND(BOUND(?date) && strlen(?date) >0 as ?dt_notEmpty)\n	BIND( if (?dt_notEmpty,\n			?date,\n			\"-\")\n		 as ?date )\n\n	# puclication_name が empty でない場合、文字連結して reference を作成\n	BIND(BOUND(?puclication_name) && strlen(?puclication_name) >0 as ?pn_notEmpty)\n	BIND( if (?pn_notEmpty,\n			CONCAT( ?author_name, \", \", \" (\",\n				?date,\n				\"). \",\n				?puclication_name,\n				\", \",\n				?volume,\n				\", \",\n				?number,\n				\", [\",\n				?starting_page,\n				\"-\",\n				?ending_page,\n				\"]. \",\n				\"<a href='\",\n				?url,\n				\"'>\",\n				?url,\n				\"</a>\"\n				),\n			\"\")\n		 as ?reference )\n}\n";
 },"useData":true}],
 ["stanza_pupa.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15233,9 +15207,9 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\r\nPREFIX sio: <http://semanticscience.org/resource/>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\r\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\r\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\r\nPREFIX dcterms: <http://purl.org/dc/terms/>\r\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\r\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\nPREFIX org: <http://www.w3.org/ns/org#>\r\nPREFIX bibo: <http://purl.org/ontology/bibo/>\r\nPREFIX obo: <http://purl.obolibrary.org/obo/>\r\n\r\n\r\nSELECT\r\n	?name\r\n	?resource_state\r\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm>\r\nWHERE {\r\n	?Resource a brso:BiologicalResourcePupa ;\r\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":21,"column":22},"end":{"line":21,"column":28}}}) : helper))) != null ? stack1 : "")
-    + "\" ;\r\n		rdfs:label ?name ;\r\n		brso:resource_state _:b_resource_state .\r\n\r\n	_:b_resource_state a brso:ResourceState ;\r\n		rdfs:label ?resource_state .\r\n}\r\nLIMIT 1\r\n";
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <http://localhost:8890/silkworm>\nWHERE {\n	?Resource a brso:BiologicalResourcePupa ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\n		rdfs:label ?name ;\n		brso:resource_state _:b_resource_state .\n\n	_:b_resource_state a brso:ResourceState ;\n		rdfs:label ?resource_state .\n}\nLIMIT 1\n";
 },"useData":true}],
 ["stanza_reference.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15245,13 +15219,13 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\r\nPREFIX sio: <http://semanticscience.org/resource/>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\r\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\r\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\r\nPREFIX dcterms: <http://purl.org/dc/terms/>\r\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\r\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\nPREFIX org: <http://www.w3.org/ns/org#>\r\nPREFIX bibo: <http://purl.org/ontology/bibo/>\r\nPREFIX obo: <http://purl.obolibrary.org/obo/>\r\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\r\n\r\n\r\nSELECT distinct\r\n	?puclication_name\r\n	?volume\r\n	?number\r\n	?starting_page\r\n	?ending_page\r\n	?date\r\n	?url\r\n	(group_concat(distinct ?author_name;separator = \", \") AS ?author_name)\r\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm>\r\nWHERE {\r\n	?Resource a brso:BiologicalResource ;\r\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":28,"column":22},"end":{"line":28,"column":28}}}) : helper))) != null ? stack1 : "")
-    + "\" ;\r\n		dcterms:reference _:b_reference .\r\n\r\n	_:b_reference a bibo:Article ;\r\n		prism:publicationName ?puclication_name ;\r\n		prism:volume ?volume ;\r\n		prism:number ?number ;\r\n		prism:startingPage ?starting_page ;\r\n		prism:endingPage ?ending_page ;\r\n		dcterms:date ?date ;\r\n		rdfs:seeAlso ?url .\r\n	filter(LANG(?puclication_name) = '"
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":39,"column":35},"end":{"line":39,"column":47}}}) : helper))) != null ? stack1 : "")
-    + "')\r\n\r\n	OPTIONAL {\r\n		_:b_reference dc:creater ?author .\r\n		?author a foaf:Person ;\r\n			foaf:name ?author_name .\r\n		filter(LANG(?author_name) = '"
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":45,"column":31},"end":{"line":45,"column":43}}}) : helper))) != null ? stack1 : "")
-    + "')\r\n	}\r\n}\r\n\r\n";
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX bibo: <http://purl.org/ontology/bibo/>\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\n\n\nSELECT distinct\n	?puclication_name\n	?volume\n	?number\n	?starting_page\n	?ending_page\n	?date\n	?url\n	(group_concat(distinct ?author_name;separator = \", \") AS ?author_name)\nFROM <http://localhost:8890/silkworm>\nWHERE {\n	?Resource a brso:BiologicalResource ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":21,"column":22},"end":{"line":21,"column":28}}}) : helper))) != null ? stack1 : "")
+    + "\" ;\n		dcterms:reference _:b_reference .\n\n	_:b_reference a bibo:Article ;\n		prism:publicationName ?puclication_name ;\n		prism:volume ?volume ;\n		prism:number ?number ;\n		prism:startingPage ?starting_page ;\n		prism:endingPage ?ending_page ;\n		dcterms:date ?date ;\n		rdfs:seeAlso ?url .\n	filter(LANG(?puclication_name) = '"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":32,"column":35},"end":{"line":32,"column":47}}}) : helper))) != null ? stack1 : "")
+    + "')\n\n	OPTIONAL {\n		_:b_reference dc:creater ?author .\n		?author a foaf:Person ;\n			foaf:name ?author_name .\n		filter(LANG(?author_name) = '"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":38,"column":31},"end":{"line":38,"column":43}}}) : helper))) != null ? stack1 : "")
+    + "')\n	}\n}\n\n";
 },"useData":true}],
 ["stanza_strain.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15261,10 +15235,10 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX so: <http://purl.obolibrary.org/obo/so#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX faldo: <http://biohackathon.org/resource/faldo#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX insdc: <http://ddbj.nig.ac.jp/ontologies/nucleotide/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX org: <http://www.w3.org/ns/org#>\nPREFIX bibo: <http://purl.org/ontology/bibo/>\nPREFIX obo: <http://purl.obolibrary.org/obo/>\n\nSELECT\n	?strain\n	?taxonomy_id\n	?description\n	(group_concat(distinct ?origin;separator = \", \") AS ?origin)\n	(group_concat(distinct ?journal;separator = \"<br/>\") AS ?journal)\n	?homepage\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm>\nWHERE {\n	?Resource a brso:BiologicalResource ;\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":24,"column":22},"end":{"line":24,"column":28}}}) : helper))) != null ? stack1 : "")
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX obo: <http://purl.obolibrary.org/obo/>\n\nSELECT\n	?strain\n	?taxonomy_id\n	?description\n	(group_concat(distinct ?origin;separator = \", \") AS ?origin)\n	(group_concat(distinct ?journal;separator = \"<br/>\") AS ?journal)\n	?homepage\nFROM <http://localhost:8890/silkworm>\nWHERE {\n	?Resource a brso:BiologicalResource ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":18,"column":22},"end":{"line":18,"column":28}}}) : helper))) != null ? stack1 : "")
     + "\" ;\n		rdfs:label ?strain ;\n		brso:organism _:b_organism ;\n		dcterms:description ?description ;\n		foaf:homepage ?homepage .\n	filter(LANG(?description) = '"
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":29,"column":30},"end":{"line":29,"column":42}}}) : helper))) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":23,"column":30},"end":{"line":23,"column":42}}}) : helper))) != null ? stack1 : "")
     + "')\n\n	_:b_organism a sio:SIO_010000 ;\n		obo:RO_0002162 ?taxonomy_id .\n\n	OPTIONAL {\n		?Resource brso:derived_from ?origin .\n	}\n	OPTIONAL {\n		?Resource dcterms:isReferencedBy ?journal .\n	}\n}\nLIMIT 1\n";
 },"useData":true}]
 ];
@@ -15272,4 +15246,4 @@ var templates = [
 const url = import.meta.url.replace(/\?.*$/, '');
 
 defineStanzaElement({stanzaModule, metadata, templates, url});
-//# sourceMappingURL=silkworm-details-search.js.map
+//# sourceMappingURL=silkworm_details_search.js.map
