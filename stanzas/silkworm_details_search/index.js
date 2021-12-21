@@ -4,7 +4,7 @@ import { unwrapValueFromBinding } from 'togostanza/utils';
  * jQueryはウェブアプリケーション側のPrimefacesと衝突するため通常はコメントアウトしておく。
  * Stanza単体で動作させる場合はコメントを外す。
  */
-//import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
+import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
 
 export default class SilkwormDetailsSearch extends Stanza {
 	async render() {
@@ -20,7 +20,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  系統リソース情報
 			//***************************************
 			const results1 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_strain.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}`,
@@ -40,7 +40,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			}
 
 			const results2 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_reference.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}`,
@@ -54,7 +54,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  卵リソース情報
 			//***************************************
 			const results3 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_egg.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -63,7 +63,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsEgg = unwrapValueFromBinding(results3);
 
 			const results4 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -72,7 +72,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsEggImage = unwrapValueFromBinding(results4);
 
 			let results5 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -107,7 +107,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results6 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_egg`,
@@ -130,7 +130,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  幼虫リソース情報
 			//***************************************
 			const results7 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_larva.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -139,7 +139,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsLarva = unwrapValueFromBinding(results7);
 
 			const results8 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -148,7 +148,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsLarvaImage = unwrapValueFromBinding(results8);
 
 			let results9 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -183,7 +183,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results10 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_feeding_ability.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -208,7 +208,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results11 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_larval_period.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -233,7 +233,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results12 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_larva`,
@@ -256,7 +256,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  蛹リソース情報
 			//***************************************
 			const results13 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_pupa.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
@@ -265,7 +265,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsPupa = unwrapValueFromBinding(results13);
 
 			const results14 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
@@ -274,7 +274,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsPupaImage = unwrapValueFromBinding(results14);
 
 			let results15 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
@@ -309,7 +309,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results16 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_pupa`,
@@ -332,7 +332,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			//  成虫リソース情報
 			//***************************************
 			const results17 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_adult.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
@@ -341,7 +341,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsAdult = unwrapValueFromBinding(results17);
 
 			const results18 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
@@ -350,7 +350,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			const resultsAdultImage = unwrapValueFromBinding(results18);
 
 			let results19 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
@@ -384,7 +384,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results20 = await this.query({
-				endpoint: 'http://133.39.75.125:8890/sparql/',
+				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					id		: `${this.params['id']}_adult`,
