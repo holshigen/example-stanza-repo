@@ -204,6 +204,16 @@ export default class SilkwormDetailsSearch extends Stanza {
 						}
 					}
 					f.bmpo = linkedUrls;
+					// 関連クラスのURLをリンクに置換
+					linkedUrls = "";
+					urls = f.related_class.split("<br/>");
+					for ( let url of urls ) {
+						if( url.length != 0 ){
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
+						}
+					}
+					f.related_class = linkedUrls;
 				}
 			}
 
@@ -229,6 +239,16 @@ export default class SilkwormDetailsSearch extends Stanza {
 						}
 					}
 					p.bmpo = linkedUrls;
+					// 関連クラスのURLをリンクに置換
+					linkedUrls = "";
+					urls = p.related_class.split("<br/>");
+					for ( let url of urls ) {
+						if( url.length != 0 ){
+							let linkedUrl = await replaceToLink(url);
+							linkedUrls = linkedUrls + linkedUrl;
+						}
+					}
+					p.related_class = linkedUrls;
 				}
 			}
 

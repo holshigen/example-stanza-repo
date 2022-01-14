@@ -6,11 +6,12 @@ PREFIX dcterms: <http://purl.org/dc/terms/>
 SELECT distinct
 	?label
 	(group_concat(distinct ?bmpo;separator = "<br/>") AS ?bmpo)
+	(group_concat(distinct ?related_class;separator = "<br/>") AS ?related_class)
 	?description
 FROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>
 WHERE {
 	?Resource a brso:BiologicalResourceLarva ;
-		dcterms:identifier "{{id}}" ;
+		dcterms:identifier "{{id}}"^^<http://www.w3.org/2001/XMLSchema#string> ;
 		sio:SIO_001279 _:b_phenotype .
 
 	_:b_phenotype a sio:SIO_010056 ;
@@ -18,12 +19,15 @@ WHERE {
 		rdfs:label ?label .
 
 	filter(LANG(?label_en) = 'en')
-	?label_en bif:contains "'period'".
+	?label_en bif:contains '"instar period" OR "diapause period"'.
 
 	filter(LANG(?label) = '{{language}}')
 
 	OPTIONAL{
 		_:b_phenotype sio:SIO_000255 ?bmpo.
+	}
+	OPTIONAL{
+		_:b_phenotype rdfs:seeAlso ?related_class.
 	}
 	OPTIONAL{
 		_:b_phenotype dcterms:description ?description.

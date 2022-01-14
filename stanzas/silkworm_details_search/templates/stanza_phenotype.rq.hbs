@@ -28,7 +28,7 @@ WHERE{
 			(group_concat(distinct ?author_name;separator = ", " ) AS ?author_name)
 		FROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>
 		WHERE {
-			?Resource dcterms:identifier "{{id}}" ;
+			?Resource dcterms:identifier "{{id}}"^^<http://www.w3.org/2001/XMLSchema#string> ;
 				sio:SIO_001279 _:b_phenotype .
 			_:b_phenotype a sio:SIO_010056 ;
 				rdfs:label ?label .

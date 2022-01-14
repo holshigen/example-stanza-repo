@@ -141,16 +141,16 @@
 		</thead>
 		<tr>
 			<th colspan="1">Phenotype</th>
-			<th colspan="2">BMPO</th>
-			<th colspan="2">seeAlso</th>
-			<th colspan="4">Reference</th>
+			<th colspan="3">BMPO</th>
+			<th colspan="3">seeAlso</th>
+			<th colspan="2">Reference</th>
 		</tr>
 			{{#each larva_phenotype as |larva_phenotype|}}
 		<tr>
 			<td colspan="1">{{{larva_phenotype.label}}}</td>
-			<td colspan="2">{{{larva_phenotype.bmpo}}}</td>
-			<td colspan="2">{{{larva_phenotype.related_class}}}</td>
-			<td colspan="4">{{{larva_phenotype.reference}}}</td>
+			<td colspan="3">{{{larva_phenotype.bmpo}}}</td>
+			<td colspan="3">{{{larva_phenotype.related_class}}}</td>
+			<td colspan="2">{{{larva_phenotype.reference}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
@@ -159,15 +159,17 @@
 			<th colspan="9">Feeding ability of artificial diets</th>
 		</thead>
 		<tr>
-			<th colspan="3">Feeding ability</th>
+			<th colspan="1">Feeding ability</th>
 			<th colspan="3">BMPO</th>
-			<th colspan="3">Description</th>
+			<th colspan="3">seeAlso</th>
+			<th colspan="2">Description</th>
 		</tr>
 			{{#each larva_feeding as |larva_feeding|}}
 		<tr>
-			<td colspan="3">{{{larva_feeding.label}}}</td>
+			<td colspan="1">{{{larva_feeding.label}}}</td>
 			<td colspan="3">{{{larva_feeding.bmpo}}}</td>
-			<td colspan="3">{{{larva_feeding.description}}}</td>
+			<td colspan="3">{{{larva_feeding.related_class}}}</td>
+			<td colspan="2">{{{larva_feeding.description}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
@@ -176,15 +178,17 @@
 			<th colspan="9">Larval Period</th>
 		</thead>
 		<tr>
-			<th colspan="3">Larval Period</th>
+			<th colspan="1">Larval Period</th>
 			<th colspan="3">BMPO</th>
-			<th colspan="3">Description</th>
+			<th colspan="3">seeAlso</th>
+			<th colspan="2">Description</th>
 		</tr>
 			{{#each larva_period as |larva_period|}}
 		<tr>
-			<td colspan="3">{{{larva_period.label}}}</td>
+			<td colspan="1">{{{larva_period.label}}}</td>
 			<td colspan="3">{{{larva_period.bmpo}}}</td>
-			<td colspan="3">{{{larva_period.description}}}</td>
+			<td colspan="3">{{{larva_period.related_class}}}</td>
+			<td colspan="2">{{{larva_period.description}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
