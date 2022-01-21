@@ -1,5 +1,3 @@
-import 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
-
 // In the absence of a WeakSet or WeakMap implementation, don't break, but don't cache either.
 function noop$1() {
     var args = [];
@@ -14045,6 +14043,12 @@ function unwrapValueFromBinding(queryResult) {
     return ret;
   });
 }
+
+/**
+ * jQueryはウェブアプリケーション側のPrimefacesと衝突するため通常はコメントアウトしておく。
+ * Stanza単体で動作させる場合はコメントを外す。
+ */
+//import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
 
 class SilkwormDetailsSearch extends Stanza {
 	async render() {
