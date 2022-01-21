@@ -22,9 +22,17 @@ main {
   overflow-wrap: anywhere;
 }
 
+.table-information th {
+  width: 25%;
+}
+
 .table-egg {
   width: 100%;
   overflow-wrap: anywhere;
+}
+
+.table-egg th {
+  width: 25%;
 }
 
 .table-larva {
@@ -33,14 +41,26 @@ main {
   overflow-wrap: anywhere;
 }
 
+.table-larva th {
+  width: 25%;
+}
+
 .table-pupa {
   width: 100%;
   overflow-wrap: anywhere;
 }
 
+.table-pupa th {
+  width: 25%;
+}
+
 .table-adult {
   width: 100%;
   overflow-wrap: anywhere;
+}
+
+.table-adult th {
+  width: 25%;
 }
 
 #loading {

@@ -1,3 +1,5 @@
+import 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
+
 // In the absence of a WeakSet or WeakMap implementation, don't break, but don't cache either.
 function noop$1() {
     var args = [];
@@ -14044,12 +14046,6 @@ function unwrapValueFromBinding(queryResult) {
   });
 }
 
-/**
- * jQueryはウェブアプリケーション側のPrimefacesと衝突するため通常はコメントアウトしておく。
- * Stanza単体で動作させる場合はコメントを外す。
- */
-//import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
-
 class SilkwormDetailsSearch extends Stanza {
 	async render() {
 		try {
@@ -14576,7 +14572,7 @@ var metadata = {
 		"stanza:required": true
 	}
 ],
-	"stanza:menu-placement": "bottom-right",
+	"stanza:menu-placement": "none",
 	"stanza:style": [
 	{
 		"stanza:key": "--greeting-color",
@@ -14703,7 +14699,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Phenotype</th>\n		</thead>\n		<tr>\n			<th>Phenotype</th>\n			<th>BMPO</th>\n			<th>seeAlso</th>\n			<th>Reference</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Phenotype</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Phenotype</th>\n			<th colspan=\"1\">BMPO</th>\n			<th colspan=\"1\">seeAlso</th>\n			<th colspan=\"1\">Reference</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"egg_phenotype") : depth0),{"name":"each","hash":{},"fn":container.program(11, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":85,"column":3},"end":{"line":92,"column":12}}})) != null ? stack1 : "");
 },"11":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -14713,13 +14709,13 @@ var templates = [
         return undefined
     };
 
-  return "		<tr>\n			<td>"
+  return "		<tr>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"label") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"related_class") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"reference") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
 },"13":function(container,depth0,helpers,partials,data,blockParams) {
@@ -14730,7 +14726,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Gene</th>\n		</thead>\n		<tr>\n			<th>Gene ID</th>\n			<th>Name</th>\n			<th>Synonym</th>\n			<th>Reference</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Gene</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Gene ID</th>\n			<th colspan=\"1\">Name</th>\n			<th colspan=\"1\">Synonym</th>\n			<th colspan=\"1\">Reference</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"egg_gene") : depth0),{"name":"each","hash":{},"fn":container.program(14, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":104,"column":3},"end":{"line":111,"column":12}}})) != null ? stack1 : "");
 },"14":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -14740,15 +14736,15 @@ var templates = [
         return undefined
     };
 
-  return "		<tr>\n			<td><a href=\"https://www.ncbi.nlm.nih.gov/gene/"
+  return "		<tr>\n			<td colspan=\"1\"><a href=\"https://www.ncbi.nlm.nih.gov/gene/"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
     + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
-    + "</a></td>\n			<td>"
+    + "</a></td>\n			<td colspan=\"1\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"name") : stack1), depth0))
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"synonym") : stack1), depth0))
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"url") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
 },"16":function(container,depth0,helpers,partials,data,blockParams) {
@@ -14759,9 +14755,9 @@ var templates = [
         return undefined
     };
 
-  return "	<table class=\"table table-sm table-striped table-bordered table-larva\">\n		<thead class=\"thead-dark\">\n			<th colspan=\"9\"><h4>Larva</h4></th>\n		</thead>\n		<tr>\n			<th colspan=\"1\" class=\"sub-title\">Resource State</th>\n			<td colspan=\"8\">"
+  return "	<table class=\"table table-sm table-striped table-bordered table-larva\">\n		<thead class=\"thead-dark\">\n			<th colspan=\"4\"><h4>Larva</h4></th>\n		</thead>\n		<tr>\n			<th colspan=\"1\" class=\"sub-title\">Resource State</th>\n			<td colspan=\"3\">"
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"larva") : depth0)) != null ? lookupProperty(stack1,"resource_state") : stack1), depth0))
-    + "</td>\n		</tr>\n		<tr>\n			<th colspan=\"1\" class=\"sub-title\">Image</th>\n			<td colspan=\"8\">\n"
+    + "</td>\n		</tr>\n		<tr>\n			<th colspan=\"1\" class=\"sub-title\">Image</th>\n			<td colspan=\"3\">\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"larva_image") : depth0),{"name":"if","hash":{},"fn":container.program(17, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":131,"column":2},"end":{"line":135,"column":9}}})) != null ? stack1 : "")
     + "			</td>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"larva_phenotype") : depth0),{"name":"if","hash":{},"fn":container.program(20, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":138,"column":2},"end":{"line":156,"column":9}}})) != null ? stack1 : "")
@@ -14797,7 +14793,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=\"9\">Phenotype</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Phenotype</th>\n			<th colspan=\"3\">BMPO</th>\n			<th colspan=\"3\">seeAlso</th>\n			<th colspan=\"2\">Reference</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=\"4\">Phenotype</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Phenotype</th>\n			<th colspan=\"1\">BMPO</th>\n			<th colspan=\"1\">seeAlso</th>\n			<th colspan=\"1\">Reference</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"larva_phenotype") : depth0),{"name":"each","hash":{},"fn":container.program(21, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":148,"column":3},"end":{"line":155,"column":12}}})) != null ? stack1 : "");
 },"21":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -14809,11 +14805,11 @@ var templates = [
 
   return "		<tr>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"label") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td colspan=\"3\">"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td colspan=\"3\">"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"related_class") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td colspan=\"2\">"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"reference") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
 },"23":function(container,depth0,helpers,partials,data,blockParams) {
@@ -14824,7 +14820,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=\"9\">Feeding ability of artificial diets</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Feeding ability</th>\n			<th colspan=\"3\">BMPO</th>\n			<th colspan=\"3\">seeAlso</th>\n			<th colspan=\"2\">Description</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=\"4\">Feeding ability of artificial diets</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Feeding ability</th>\n			<th colspan=\"1\">BMPO</th>\n			<th colspan=\"1\">seeAlso</th>\n			<th colspan=\"1\">Description</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"larva_feeding") : depth0),{"name":"each","hash":{},"fn":container.program(24, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":167,"column":3},"end":{"line":174,"column":12}}})) != null ? stack1 : "");
 },"24":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -14836,11 +14832,11 @@ var templates = [
 
   return "		<tr>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"label") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td colspan=\"3\">"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td colspan=\"3\">"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"related_class") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td colspan=\"2\">"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"description") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
 },"26":function(container,depth0,helpers,partials,data,blockParams) {
@@ -14851,7 +14847,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=\"9\">Larval Period</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Larval Period</th>\n			<th colspan=\"3\">BMPO</th>\n			<th colspan=\"3\">seeAlso</th>\n			<th colspan=\"2\">Description</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=\"4\">Larval Period</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Larval Period</th>\n			<th colspan=\"1\">BMPO</th>\n			<th colspan=\"1\">seeAlso</th>\n			<th colspan=\"1\">Description</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"larva_period") : depth0),{"name":"each","hash":{},"fn":container.program(27, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":186,"column":3},"end":{"line":193,"column":12}}})) != null ? stack1 : "");
 },"27":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -14863,11 +14859,11 @@ var templates = [
 
   return "		<tr>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"label") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td colspan=\"3\">"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td colspan=\"3\">"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"related_class") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td colspan=\"2\">"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"description") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
 },"29":function(container,depth0,helpers,partials,data,blockParams) {
@@ -14878,7 +14874,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=9\">Gene</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Gene ID</th>\n			<th colspan=\"2\">Name</th>\n			<th colspan=\"2\">Synonym</th>\n			<th colspan=\"4\">Reference</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Gene</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Gene ID</th>\n			<th colspan=\"1\">Name</th>\n			<th colspan=\"1\">Synonym</th>\n			<th colspan=\"1\">Reference</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"larva_gene") : depth0),{"name":"each","hash":{},"fn":container.program(30, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":205,"column":3},"end":{"line":212,"column":12}}})) != null ? stack1 : "");
 },"30":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -14892,11 +14888,11 @@ var templates = [
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
     + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
-    + "</a></td>\n			<td colspan=\"2\">"
+    + "</a></td>\n			<td colspan=\"1\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"name") : stack1), depth0))
-    + "</td>\n			<td colspan=\"2\">"
+    + "</td>\n			<td colspan=\"1\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"synonym") : stack1), depth0))
-    + "</td>\n			<td colspan=\"4\">"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"url") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
 },"32":function(container,depth0,helpers,partials,data,blockParams) {
@@ -14943,7 +14939,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Phenotype</th>\n		</thead>\n		<tr>\n			<th>Phenotype</th>\n			<th>BMPO</th>\n			<th>seeAlso</th>\n			<th>Reference</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Phenotype</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Phenotype</th>\n			<th colspan=\"1\">BMPO</th>\n			<th colspan=\"1\">seeAlso</th>\n			<th colspan=\"1\">Reference</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"pupa_phenotype") : depth0),{"name":"each","hash":{},"fn":container.program(37, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":250,"column":3},"end":{"line":257,"column":12}}})) != null ? stack1 : "");
 },"37":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -14953,13 +14949,13 @@ var templates = [
         return undefined
     };
 
-  return "		<tr>\n			<td>"
+  return "		<tr>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"label") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"related_class") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"reference") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
 },"39":function(container,depth0,helpers,partials,data,blockParams) {
@@ -14970,7 +14966,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Gene</th>\n		</thead>\n		<tr>\n			<th>Gene ID</th>\n			<th>Name</th>\n			<th>Synonym</th>\n			<th>Reference</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Gene</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Gene ID</th>\n			<th colspan=\"1\">Name</th>\n			<th colspan=\"1\">Synonym</th>\n			<th colspan=\"1\">Reference</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"pupa_gene") : depth0),{"name":"each","hash":{},"fn":container.program(40, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":269,"column":3},"end":{"line":276,"column":12}}})) != null ? stack1 : "");
 },"40":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -14980,15 +14976,15 @@ var templates = [
         return undefined
     };
 
-  return "		<tr>\n			<td><a href=\"https://www.ncbi.nlm.nih.gov/gene/"
+  return "		<tr>\n			<td colspan=\"1\"><a href=\"https://www.ncbi.nlm.nih.gov/gene/"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
     + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
-    + "</a></td>\n			<td>"
+    + "</a></td>\n			<td colspan=\"1\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"name") : stack1), depth0))
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"synonym") : stack1), depth0))
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"url") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
 },"42":function(container,depth0,helpers,partials,data,blockParams) {
@@ -15035,7 +15031,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Phenotype</th>\n		</thead>\n		<tr>\n			<th>Phenotype</th>\n			<th>BMPO</th>\n			<th>seeAlso</th>\n			<th>Reference</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Phenotype</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Phenotype</th>\n			<th colspan=\"1\">BMPO</th>\n			<th colspan=\"1\">seeAlso</th>\n			<th colspan=\"1\">Reference</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"adult_phenotype") : depth0),{"name":"each","hash":{},"fn":container.program(47, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":313,"column":3},"end":{"line":320,"column":12}}})) != null ? stack1 : "");
 },"47":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15045,13 +15041,13 @@ var templates = [
         return undefined
     };
 
-  return "		<tr>\n			<td>"
+  return "		<tr>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"label") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"bmpo") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"related_class") : stack1), depth0)) != null ? stack1 : "")
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"reference") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
 },"49":function(container,depth0,helpers,partials,data,blockParams) {
@@ -15062,7 +15058,7 @@ var templates = [
         return undefined
     };
 
-  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Gene</th>\n		</thead>\n		<tr>\n			<th>Gene ID</th>\n			<th>Name</th>\n			<th>Synonym</th>\n			<th>Reference</th>\n		</tr>\n"
+  return "		<thead class=\"thead-dark\">\n			<th colspan=4\">Gene</th>\n		</thead>\n		<tr>\n			<th colspan=\"1\">Gene ID</th>\n			<th colspan=\"1\">Name</th>\n			<th colspan=\"1\">Synonym</th>\n			<th colspan=\"1\">Reference</th>\n		</tr>\n"
     + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"adult_gene") : depth0),{"name":"each","hash":{},"fn":container.program(50, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":332,"column":3},"end":{"line":339,"column":12}}})) != null ? stack1 : "");
 },"50":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -15072,17 +15068,28 @@ var templates = [
         return undefined
     };
 
-  return "		<tr>\n			<td><a href=\"https://www.ncbi.nlm.nih.gov/gene/"
+  return "		<tr>\n			<td colspan=\"1\"><a href=\"https://www.ncbi.nlm.nih.gov/gene/"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
     + "\" target=\"_blank\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"id") : stack1), depth0))
-    + "</a></td>\n			<td>"
+    + "</a></td>\n			<td colspan=\"1\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"name") : stack1), depth0))
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"synonym") : stack1), depth0))
-    + "</td>\n			<td>"
+    + "</td>\n			<td colspan=\"1\">"
     + ((stack1 = alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"url") : stack1), depth0)) != null ? stack1 : "")
     + "</td>\n		</tr>\n";
+},"52":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "	<div><a href=\""
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"information") : depth0)) != null ? lookupProperty(stack1,"homepage") : stack1), depth0))
+    + "\" target=\"_blank\">Click here to order</a></div>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -15101,9 +15108,9 @@ var templates = [
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"pupa") : depth0),{"name":"if","hash":{},"fn":container.program(32, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":220,"column":1},"end":{"line":279,"column":8}}})) != null ? stack1 : "")
     + "\n	<!--\n		成虫リソース情報\n	-->\n"
     + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"adult") : depth0),{"name":"if","hash":{},"fn":container.program(42, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":284,"column":1},"end":{"line":342,"column":8}}})) != null ? stack1 : "")
-    + "	<div><a href=\""
-    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"information") : depth0)) != null ? lookupProperty(stack1,"homepage") : stack1), depth0))
-    + "\" target=\"_blank\">Click here to order</a></div>\n\n</div>\n";
+    + "\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"information") : depth0),{"name":"if","hash":{},"fn":container.program(52, data, 0, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":344,"column":1},"end":{"line":346,"column":8}}})) != null ? stack1 : "")
+    + "</div>\n";
 },"useData":true,"useBlockParams":true}],
 ["stanza_adult.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
