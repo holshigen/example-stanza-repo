@@ -77,17 +77,17 @@
 			<th colspan=4">Phenotype</th>
 		</thead>
 		<tr>
-			<th>Phenotype</th>
-			<th>BMPO</th>
-			<th>seeAlso</th>
-			<th>Reference</th>
+			<th colspan="1">Phenotype</th>
+			<th colspan="1">BMPO</th>
+			<th colspan="1">seeAlso</th>
+			<th colspan="1">Reference</th>
 		</tr>
 			{{#each egg_phenotype as |egg_phenotype|}}
 		<tr>
-			<td>{{{egg_phenotype.label}}}</td>
-			<td>{{{egg_phenotype.bmpo}}}</td>
-			<td>{{{egg_phenotype.related_class}}}</td>
-			<td>{{{egg_phenotype.reference}}}</td>
+			<td colspan="1">{{{egg_phenotype.label}}}</td>
+			<td colspan="1">{{{egg_phenotype.bmpo}}}</td>
+			<td colspan="1">{{{egg_phenotype.related_class}}}</td>
+			<td colspan="1">{{{egg_phenotype.reference}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
@@ -96,17 +96,17 @@
 			<th colspan=4">Gene</th>
 		</thead>
 		<tr>
-			<th>Gene ID</th>
-			<th>Name</th>
-			<th>Synonym</th>
-			<th>Reference</th>
+			<th colspan="1">Gene ID</th>
+			<th colspan="1">Name</th>
+			<th colspan="1">Synonym</th>
+			<th colspan="1">Reference</th>
 		</tr>
 			{{#each egg_gene as |egg_gene|}}
 		<tr>
-			<td><a href="https://www.ncbi.nlm.nih.gov/gene/{{egg_gene.id}}" target="_blank">{{egg_gene.id}}</a></td>
-			<td>{{egg_gene.name}}</td>
-			<td>{{egg_gene.synonym}}</td>
-			<td>{{{egg_gene.url}}}</td>
+			<td colspan="1"><a href="https://www.ncbi.nlm.nih.gov/gene/{{egg_gene.id}}" target="_blank">{{egg_gene.id}}</a></td>
+			<td colspan="1">{{egg_gene.name}}</td>
+			<td colspan="1">{{egg_gene.synonym}}</td>
+			<td colspan="1">{{{egg_gene.url}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
@@ -119,15 +119,15 @@
 	{{#if larva}}
 	<table class="table table-sm table-striped table-bordered table-larva">
 		<thead class="thead-dark">
-			<th colspan="9"><h4>Larva</h4></th>
+			<th colspan="4"><h4>Larva</h4></th>
 		</thead>
 		<tr>
 			<th colspan="1" class="sub-title">Resource State</th>
-			<td colspan="8">{{larva.resource_state}}</td>
+			<td colspan="3">{{larva.resource_state}}</td>
 		</tr>
 		<tr>
 			<th colspan="1" class="sub-title">Image</th>
-			<td colspan="8">
+			<td colspan="3">
 		{{#if larva_image}}
 			{{#each larva_image as |larva_image|}}
 				<img width="120px" src="{{larva_image.image}}">
@@ -137,77 +137,77 @@
 		</tr>
 		{{#if larva_phenotype}}
 		<thead class="thead-dark">
-			<th colspan="9">Phenotype</th>
+			<th colspan="4">Phenotype</th>
 		</thead>
 		<tr>
 			<th colspan="1">Phenotype</th>
-			<th colspan="3">BMPO</th>
-			<th colspan="3">seeAlso</th>
-			<th colspan="2">Reference</th>
+			<th colspan="1">BMPO</th>
+			<th colspan="1">seeAlso</th>
+			<th colspan="1">Reference</th>
 		</tr>
 			{{#each larva_phenotype as |larva_phenotype|}}
 		<tr>
 			<td colspan="1">{{{larva_phenotype.label}}}</td>
-			<td colspan="3">{{{larva_phenotype.bmpo}}}</td>
-			<td colspan="3">{{{larva_phenotype.related_class}}}</td>
-			<td colspan="2">{{{larva_phenotype.reference}}}</td>
+			<td colspan="1">{{{larva_phenotype.bmpo}}}</td>
+			<td colspan="1">{{{larva_phenotype.related_class}}}</td>
+			<td colspan="1">{{{larva_phenotype.reference}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
 		{{#if larva_feeding}}
 		<thead class="thead-dark">
-			<th colspan="9">Feeding ability of artificial diets</th>
+			<th colspan="4">Feeding ability of artificial diets</th>
 		</thead>
 		<tr>
 			<th colspan="1">Feeding ability</th>
-			<th colspan="3">BMPO</th>
-			<th colspan="3">seeAlso</th>
-			<th colspan="2">Description</th>
+			<th colspan="1">BMPO</th>
+			<th colspan="1">seeAlso</th>
+			<th colspan="1">Description</th>
 		</tr>
 			{{#each larva_feeding as |larva_feeding|}}
 		<tr>
 			<td colspan="1">{{{larva_feeding.label}}}</td>
-			<td colspan="3">{{{larva_feeding.bmpo}}}</td>
-			<td colspan="3">{{{larva_feeding.related_class}}}</td>
-			<td colspan="2">{{{larva_feeding.description}}}</td>
+			<td colspan="1">{{{larva_feeding.bmpo}}}</td>
+			<td colspan="1">{{{larva_feeding.related_class}}}</td>
+			<td colspan="1">{{{larva_feeding.description}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
 		{{#if larva_period}}
 		<thead class="thead-dark">
-			<th colspan="9">Larval Period</th>
+			<th colspan="4">Larval Period</th>
 		</thead>
 		<tr>
 			<th colspan="1">Larval Period</th>
-			<th colspan="3">BMPO</th>
-			<th colspan="3">seeAlso</th>
-			<th colspan="2">Description</th>
+			<th colspan="1">BMPO</th>
+			<th colspan="1">seeAlso</th>
+			<th colspan="1">Description</th>
 		</tr>
 			{{#each larva_period as |larva_period|}}
 		<tr>
 			<td colspan="1">{{{larva_period.label}}}</td>
-			<td colspan="3">{{{larva_period.bmpo}}}</td>
-			<td colspan="3">{{{larva_period.related_class}}}</td>
-			<td colspan="2">{{{larva_period.description}}}</td>
+			<td colspan="1">{{{larva_period.bmpo}}}</td>
+			<td colspan="1">{{{larva_period.related_class}}}</td>
+			<td colspan="1">{{{larva_period.description}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
 		{{#if larva_gene}}
 		<thead class="thead-dark">
-			<th colspan=9">Gene</th>
+			<th colspan=4">Gene</th>
 		</thead>
 		<tr>
 			<th colspan="1">Gene ID</th>
-			<th colspan="2">Name</th>
-			<th colspan="2">Synonym</th>
-			<th colspan="4">Reference</th>
+			<th colspan="1">Name</th>
+			<th colspan="1">Synonym</th>
+			<th colspan="1">Reference</th>
 		</tr>
 			{{#each larva_gene as |larva_gene|}}
 		<tr>
 			<td colspan="1"><a href="https://www.ncbi.nlm.nih.gov/gene/{{larva_gene.id}}" target="_blank">{{larva_gene.id}}</a></td>
-			<td colspan="2">{{larva_gene.name}}</td>
-			<td colspan="2">{{larva_gene.synonym}}</td>
-			<td colspan="4">{{{larva_gene.url}}}</td>
+			<td colspan="1">{{larva_gene.name}}</td>
+			<td colspan="1">{{larva_gene.synonym}}</td>
+			<td colspan="1">{{{larva_gene.url}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
@@ -242,17 +242,17 @@
 			<th colspan=4">Phenotype</th>
 		</thead>
 		<tr>
-			<th>Phenotype</th>
-			<th>BMPO</th>
-			<th>seeAlso</th>
-			<th>Reference</th>
+			<th colspan="1">Phenotype</th>
+			<th colspan="1">BMPO</th>
+			<th colspan="1">seeAlso</th>
+			<th colspan="1">Reference</th>
 		</tr>
 			{{#each pupa_phenotype as |pupa_phenotype|}}
 		<tr>
-			<td>{{{pupa_phenotype.label}}}</td>
-			<td>{{{pupa_phenotype.bmpo}}}</td>
-			<td>{{{pupa_phenotype.related_class}}}</td>
-			<td>{{{pupa_phenotype.reference}}}</td>
+			<td colspan="1">{{{pupa_phenotype.label}}}</td>
+			<td colspan="1">{{{pupa_phenotype.bmpo}}}</td>
+			<td colspan="1">{{{pupa_phenotype.related_class}}}</td>
+			<td colspan="1">{{{pupa_phenotype.reference}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
@@ -261,17 +261,17 @@
 			<th colspan=4">Gene</th>
 		</thead>
 		<tr>
-			<th>Gene ID</th>
-			<th>Name</th>
-			<th>Synonym</th>
-			<th>Reference</th>
+			<th colspan="1">Gene ID</th>
+			<th colspan="1">Name</th>
+			<th colspan="1">Synonym</th>
+			<th colspan="1">Reference</th>
 		</tr>
 			{{#each pupa_gene as |pupa_gene|}}
 		<tr>
-			<td><a href="https://www.ncbi.nlm.nih.gov/gene/{{pupa_gene.id}}" target="_blank">{{pupa_gene.id}}</a></td>
-			<td>{{pupa_gene.name}}</td>
-			<td>{{pupa_gene.synonym}}</td>
-			<td>{{{pupa_gene.url}}}</td>
+			<td colspan="1"><a href="https://www.ncbi.nlm.nih.gov/gene/{{pupa_gene.id}}" target="_blank">{{pupa_gene.id}}</a></td>
+			<td colspan="1">{{pupa_gene.name}}</td>
+			<td colspan="1">{{pupa_gene.synonym}}</td>
+			<td colspan="1">{{{pupa_gene.url}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
@@ -305,17 +305,17 @@
 			<th colspan=4">Phenotype</th>
 		</thead>
 		<tr>
-			<th>Phenotype</th>
-			<th>BMPO</th>
-			<th>seeAlso</th>
-			<th>Reference</th>
+			<th colspan="1">Phenotype</th>
+			<th colspan="1">BMPO</th>
+			<th colspan="1">seeAlso</th>
+			<th colspan="1">Reference</th>
 		</tr>
 			{{#each adult_phenotype as |adult_phenotype|}}
 		<tr>
-			<td>{{{adult_phenotype.label}}}</td>
-			<td>{{{adult_phenotype.bmpo}}}</td>
-			<td>{{{adult_phenotype.related_class}}}</td>
-			<td>{{{adult_phenotype.reference}}}</td>
+			<td colspan="1">{{{adult_phenotype.label}}}</td>
+			<td colspan="1">{{{adult_phenotype.bmpo}}}</td>
+			<td colspan="1">{{{adult_phenotype.related_class}}}</td>
+			<td colspan="1">{{{adult_phenotype.reference}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
@@ -324,22 +324,24 @@
 			<th colspan=4">Gene</th>
 		</thead>
 		<tr>
-			<th>Gene ID</th>
-			<th>Name</th>
-			<th>Synonym</th>
-			<th>Reference</th>
+			<th colspan="1">Gene ID</th>
+			<th colspan="1">Name</th>
+			<th colspan="1">Synonym</th>
+			<th colspan="1">Reference</th>
 		</tr>
 			{{#each adult_gene as |adult_gene|}}
 		<tr>
-			<td><a href="https://www.ncbi.nlm.nih.gov/gene/{{adult_gene.id}}" target="_blank">{{adult_gene.id}}</a></td>
-			<td>{{adult_gene.name}}</td>
-			<td>{{adult_gene.synonym}}</td>
-			<td>{{{adult_gene.url}}}</td>
+			<td colspan="1"><a href="https://www.ncbi.nlm.nih.gov/gene/{{adult_gene.id}}" target="_blank">{{adult_gene.id}}</a></td>
+			<td colspan="1">{{adult_gene.name}}</td>
+			<td colspan="1">{{adult_gene.synonym}}</td>
+			<td colspan="1">{{{adult_gene.url}}}</td>
 		</tr>
 			{{/each}}
 		{{/if}}
 	</table>
 	{{/if}}
-	<div><a href="{{information.homepage}}" target="_blank">Click here to order</a></div>
 
+	{{#if information}}
+	<div><a href="{{information.homepage}}" target="_blank">Click here to order</a></div>
+	{{/if}}
 </div>

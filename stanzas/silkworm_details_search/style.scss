@@ -8,33 +8,54 @@ main {
 }
 
 .sub-title {
-	width			: 12%;
+	width : 12%;
 }
 
 .table-information {
-	width			: 100% ;
-	overflow-wrap	: anywhere ;
+	width : 100% ;
+	overflow-wrap : anywhere ;
+}
+
+.table-information th {
+	width : 25% ;
 }
 
 .table-egg {
-	width			: 100% ;
-	overflow-wrap	: anywhere ;
+	width : 100% ;
+	overflow-wrap : anywhere ;
+}
+
+.table-egg th {
+	width : 25% ;
 }
 
 .table-larva {
-	table-layout	: fixed ;
-	width			: 100% ;
-	overflow-wrap	: anywhere ;
+	table-layout : fixed ;
+	width : 100% ;
+	overflow-wrap : anywhere ;
 }
 
+.table-larva th {
+	width : 25% ;
+}
+
+
 .table-pupa {
-	width			: 100% ;
-	overflow-wrap	: anywhere ;
+	width : 100% ;
+	overflow-wrap : anywhere ;
+}
+
+.table-pupa th {
+	width : 25% ;
 }
 
 .table-adult {
-	width			: 100% ;
-	overflow-wrap	: anywhere ;
+	width : 100% ;
+	overflow-wrap : anywhere ;
+}
+
+.table-adult th {
+	width : 25% ;
 }
 
 #loading {
