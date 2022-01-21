@@ -13,7 +13,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 			// ローディング中くるくる表示
 			var dispMsg = "<div class='loadingMsg'>Now loading</div>";
 			if ($(this.root.querySelector("#loading")).length == 0) {
-				$(this.root.querySelector("main")).append("<div id='loading'>" + dispMsg + "</div>");
+				$(this.root.querySelector("main")).html("<div id='loading'>" + dispMsg + "</div>");
 			}
 
 			//***************************************
@@ -457,7 +457,13 @@ export default class SilkwormDetailsSearch extends Stanza {
 			$(this.root.querySelector("#loading")).remove();
 
 		} catch (e) {
-			console.error(e);
+
+			// エラー画面表示
+			this.renderTemplate({
+				template: 'error.html.hbs'
+			});
+
+			console.log(e);
 		}
 	}
 }
