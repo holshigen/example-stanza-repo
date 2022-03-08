@@ -7,8 +7,7 @@ import { unwrapValueFromBinding } from 'togostanza/utils';
 import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
 import config from '@/config/config.js';
 
-const environment = process.env.NODE_ENV;
-const endpoint_test = process.env.ENDPOINT;
+const environment = 'development';
 
 export default class SilkwormDetailsSearch extends Stanza {
 
