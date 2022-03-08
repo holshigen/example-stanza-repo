@@ -21,8 +21,8 @@ jobs:
 
       - run: npm ci
       - run: npx togostanza build
-        env:
-          ENDPOINT: ${{ secrets.ENDPOINT }}
+      - run: echo "endpoint=${{ secrets.ENDPOINT }}"
+          echo "ENDPOINT=${{ secrets.ENDPOINT }}" >> $GITHUB_ENV
 
       - uses: peaceiris/actions-gh-pages@v3
         with:
