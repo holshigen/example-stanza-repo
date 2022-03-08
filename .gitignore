@@ -1,2 +1,9 @@
 /dist/
 /node_modules/
+/build.xml
+/build.properties
+/.project
+/.settings/
+/.tern-project
+/.gitignore
+/project.dtd
