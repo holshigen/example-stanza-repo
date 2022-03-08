@@ -24,7 +24,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint = config.RELEASE_ENDPOINT;
 				graph = config.RELEASE_GRAPH;
 			} else {
-				return e;
+				// 何もしない
 			}
 
 			// ローディング中くるくる表示
