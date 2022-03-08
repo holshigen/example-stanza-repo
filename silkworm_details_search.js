@@ -14058,6 +14058,7 @@ var config = {
 };
 
 const environment = "production";
+process.env.ENDPOINT;
 
 class SilkwormDetailsSearch extends Stanza {
 
@@ -14081,7 +14082,7 @@ class SilkwormDetailsSearch extends Stanza {
 			//  系統リソース情報
 			//***************************************
 			const results1 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_strain.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14102,7 +14103,7 @@ class SilkwormDetailsSearch extends Stanza {
 			}
 
 			const results2 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_reference.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14117,7 +14118,7 @@ class SilkwormDetailsSearch extends Stanza {
 			//  卵リソース情報
 			//***************************************
 			const results3 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_egg.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14127,7 +14128,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsEgg = unwrapValueFromBinding(results3);
 
 			const results4 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14137,7 +14138,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsEggImage = unwrapValueFromBinding(results4);
 
 			let results5 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14173,7 +14174,7 @@ class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results6 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14197,7 +14198,7 @@ class SilkwormDetailsSearch extends Stanza {
 			//  幼虫リソース情報
 			//***************************************
 			const results7 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_larva.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14207,7 +14208,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsLarva = unwrapValueFromBinding(results7);
 
 			const results8 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14217,7 +14218,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsLarvaImage = unwrapValueFromBinding(results8);
 
 			let results9 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14253,7 +14254,7 @@ class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results10 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_feeding_ability.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14289,7 +14290,7 @@ class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results11 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_larval_period.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14325,7 +14326,7 @@ class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results12 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14349,7 +14350,7 @@ class SilkwormDetailsSearch extends Stanza {
 			//  蛹リソース情報
 			//***************************************
 			const results13 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_pupa.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14359,7 +14360,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsPupa = unwrapValueFromBinding(results13);
 
 			const results14 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14369,7 +14370,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsPupaImage = unwrapValueFromBinding(results14);
 
 			let results15 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14405,7 +14406,7 @@ class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results16 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14429,7 +14430,7 @@ class SilkwormDetailsSearch extends Stanza {
 			//  成虫リソース情報
 			//***************************************
 			const results17 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_adult.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14439,7 +14440,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsAdult = unwrapValueFromBinding(results17);
 
 			const results18 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_image.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14449,7 +14450,7 @@ class SilkwormDetailsSearch extends Stanza {
 			const resultsAdultImage = unwrapValueFromBinding(results18);
 
 			let results19 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
@@ -14484,7 +14485,7 @@ class SilkwormDetailsSearch extends Stanza {
 			}
 
 			let results20 = await this.query({
-				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+				endpoint: endpoint,
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
 					graph	: `${graph}`,
