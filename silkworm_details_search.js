@@ -14068,7 +14068,7 @@ class SilkwormDetailsSearch extends Stanza {
 			let graph = '';
 
 			if (environment == 'development'); else if(environment == 'release'); else {
-				return e;
+				// 何もしない
 			}
 
 			// ローディング中くるくる表示
