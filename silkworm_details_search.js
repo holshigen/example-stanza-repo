@@ -14057,8 +14057,7 @@ var config = {
 	RELEASE_GRAPH: 'https://lod.nbrp.jp/bmori/mutants'
 };
 
-const environment = "production";
-process.env.ENDPOINT;
+const environment = 'development';
 
 class SilkwormDetailsSearch extends Stanza {
 
@@ -14068,8 +14067,9 @@ class SilkwormDetailsSearch extends Stanza {
 			let endpoint = '';
 			let graph = '';
 
-			if (environment == 'development'); else if(environment == 'release'); else {
-				// 何もしない
+			if (environment == 'development'){
+				endpoint = config.DEVELOP_ENDPOINT;
+				graph = config.DEVELOP_GRAPH;
 			}
 
 			// ローディング中くるくる表示
