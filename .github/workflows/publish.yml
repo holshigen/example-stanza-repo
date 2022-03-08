@@ -1,9 +1,5 @@
 name: Publish GitHub Pages
 
-env:
-  ENDPOINT: ${{ secrets.ENDPOINT }}
-
-
 on:
   push:
     branches:
@@ -25,6 +21,8 @@ jobs:
 
       - run: npm ci
       - run: npx togostanza build
+        env:
+          ENDPOINT: ${{ secrets.ENDPOINT }}
 
       - uses: peaceiris/actions-gh-pages@v3
         with:
