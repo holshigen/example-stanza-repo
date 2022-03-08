@@ -4,11 +4,28 @@ import { unwrapValueFromBinding } from 'togostanza/utils';
  * jQueryはウェブアプリケーション側のPrimefacesと衝突するため通常はコメントアウトしておく。
  * Stanza単体で動作させる場合はコメントを外す。
  */
-//import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
+import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
+import config from '@/config/config.js';
+
+const environment = process.env.NODE_ENV;
 
 export default class SilkwormDetailsSearch extends Stanza {
+
 	async render() {
+
 		try {
+			let endpoint = '';
+			let graph = '';
+
+			if (environment == 'development'){
+				endpoint = config.DEVELOP_ENDPOINT;
+				graph = config.DEVELOP_GRAPH;
+			} else if(environment == 'release'){
+				endpoint = config.RELEASE_ENDPOINT;
+				graph = config.RELEASE_GRAPH;
+			} else {
+				return e;
+			}
 
 			// ローディング中くるくる表示
 			var dispMsg = "<div class='loadingMsg'>Now loading</div>";
@@ -23,6 +40,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_strain.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}`,
 					language: `${this.params['language']}`,
 				},
@@ -43,6 +61,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_reference.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}`,
 					language: `${this.params['language']}`,
 				},
@@ -57,6 +76,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_egg.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_egg`,
 				},
 			});
@@ -66,6 +86,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_egg`,
 				},
 			});
@@ -75,6 +96,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_egg`,
 					language: `${this.params['language']}`,
 				},
@@ -110,6 +132,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_egg`,
 				},
 			});
@@ -133,6 +156,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_larva.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 				},
 			});
@@ -142,6 +166,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 				},
 			});
@@ -151,6 +176,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 					language: `${this.params['language']}`,
 				},
@@ -186,6 +212,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_feeding_ability.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 					language: `${this.params['language']}`,
 				},
@@ -221,6 +248,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_larval_period.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 					language: `${this.params['language']}`,
 				},
@@ -256,6 +284,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 				},
 			});
@@ -279,6 +308,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_pupa.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
@@ -288,6 +318,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
@@ -297,6 +328,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_pupa`,
 					language: `${this.params['language']}`,
 				},
@@ -332,6 +364,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
@@ -355,6 +388,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_adult.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_adult`,
 				},
 			});
@@ -364,6 +398,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_adult`,
 				},
 			});
@@ -373,6 +408,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_adult`,
 					language: `${this.params['language']}`,
 				},
@@ -407,6 +443,7 @@ export default class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_adult`,
 				},
 			});

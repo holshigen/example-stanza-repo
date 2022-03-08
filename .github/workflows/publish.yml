@@ -1,5 +1,9 @@
 name: Publish GitHub Pages
 
+env:
+  NODE_ENV: ${{ secrets.NODE_ENV }}
+
+
 on:
   push:
     branches:
