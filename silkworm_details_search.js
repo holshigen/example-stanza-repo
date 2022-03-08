@@ -1,3 +1,5 @@
+import 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
+
 // In the absence of a WeakSet or WeakMap implementation, don't break, but don't cache either.
 function noop$1() {
     var args = [];
@@ -14044,15 +14046,30 @@ function unwrapValueFromBinding(queryResult) {
   });
 }
 
-/**
- * jQueryはウェブアプリケーション側のPrimefacesと衝突するため通常はコメントアウトしておく。
- * Stanza単体で動作させる場合はコメントを外す。
- */
-//import * as jquery from 'https://rcshige3.nig.ac.jp/rdf/js/jquery-3.5.1.min.js';
+var config = {
+
+	// 開発環境
+	DEVELOP_ENDPOINT: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
+	DEVELOP_GRAPH: 'http://iruddat2.nig.ac.jp:8120/bmori/mutants',
+
+	// 本番環境
+	RELEASE_ENDPOINT: 'https://lod.nbrp.jp/sparql',
+	RELEASE_GRAPH: 'https://lod.nbrp.jp/bmori/mutants'
+};
+
+const environment = "production";
 
 class SilkwormDetailsSearch extends Stanza {
+
 	async render() {
+
 		try {
+			let endpoint = '';
+			let graph = '';
+
+			if (environment == 'development'); else if(environment == 'release'); else {
+				return e;
+			}
 
 			// ローディング中くるくる表示
 			var dispMsg = "<div class='loadingMsg'>Now loading</div>";
@@ -14067,6 +14084,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_strain.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}`,
 					language: `${this.params['language']}`,
 				},
@@ -14087,6 +14105,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_reference.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}`,
 					language: `${this.params['language']}`,
 				},
@@ -14101,6 +14120,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_egg.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_egg`,
 				},
 			});
@@ -14110,6 +14130,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_egg`,
 				},
 			});
@@ -14119,6 +14140,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_egg`,
 					language: `${this.params['language']}`,
 				},
@@ -14154,6 +14176,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_egg`,
 				},
 			});
@@ -14177,6 +14200,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_larva.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 				},
 			});
@@ -14186,6 +14210,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 				},
 			});
@@ -14195,6 +14220,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 					language: `${this.params['language']}`,
 				},
@@ -14230,6 +14256,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_feeding_ability.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 					language: `${this.params['language']}`,
 				},
@@ -14265,6 +14292,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_larval_period.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 					language: `${this.params['language']}`,
 				},
@@ -14300,6 +14328,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_larva`,
 				},
 			});
@@ -14323,6 +14352,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_pupa.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
@@ -14332,6 +14362,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
@@ -14341,6 +14372,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_pupa`,
 					language: `${this.params['language']}`,
 				},
@@ -14376,6 +14408,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_pupa`,
 				},
 			});
@@ -14399,6 +14432,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_adult.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_adult`,
 				},
 			});
@@ -14408,6 +14442,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_image.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_adult`,
 				},
 			});
@@ -14417,6 +14452,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_phenotype.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_adult`,
 					language: `${this.params['language']}`,
 				},
@@ -14451,6 +14487,7 @@ class SilkwormDetailsSearch extends Stanza {
 				endpoint: 'https://rcshige3.nig.ac.jp/rdf/sparql/',
 				template: 'stanza_gene.rq.hbs',
 				parameters: {
+					graph	: `${graph}`,
 					id		: `${this.params['id']}_adult`,
 				},
 			});
@@ -15126,27 +15163,31 @@ var templates = [
     + "</div>\n";
 },"useData":true,"useBlockParams":true}],
 ["stanza_adult.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE {\n	?Resource a brso:BiologicalResourceAdult ;\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE {\n	?Resource a brso:BiologicalResourceAdult ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n		rdfs:label ?name ;\n		brso:resource_state _:b_resource_state .\n\n	_:b_resource_state a brso:ResourceState ;\n		rdfs:label ?resource_state .\n}\nLIMIT 1\n";
 },"useData":true}],
 ["stanza_egg.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE {\n	?Resource a brso:BiologicalResourceEgg ;\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE {\n	?Resource a brso:BiologicalResourceEgg ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n		rdfs:label ?name ;\n		brso:resource_state _:b_resource_state .\n\n	_:b_resource_state a brso:ResourceState ;\n		rdfs:label ?resource_state .\n}\nLIMIT 1\n";
 },"useData":true}],
 ["stanza_feeding_ability.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -15157,7 +15198,9 @@ var templates = [
         return undefined
     };
 
-  return "DEFINE sql:select-option \"order\"\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\n\nSELECT distinct\n	?label\n	(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\n	(group_concat(distinct ?related_class;separator = \"<br/>\") AS ?related_class)\n	?description\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE {\n	?Resource a brso:BiologicalResourceLarva ;\n		dcterms:identifier \""
+  return "DEFINE sql:select-option \"order\"\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\n\nSELECT distinct\n	?label\n	(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\n	(group_concat(distinct ?related_class;separator = \"<br/>\") AS ?related_class)\n	?description\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":12,"column":6},"end":{"line":12,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE {\n	?Resource a brso:BiologicalResourceLarva ;\n		dcterms:identifier \""
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":15,"column":22},"end":{"line":15,"column":28}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n		sio:SIO_001279 _:b_phenotype .\n\n	_:b_phenotype a sio:SIO_010056 ;\n		rdfs:label ?label_en ;\n		rdfs:label ?label .\n\n	filter(LANG(?label_en) = 'en')\n	?label_en bif:contains '\"artificial diets preference\"'.\n\n	filter(LANG(?label) = '"
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":25,"column":24},"end":{"line":25,"column":36}}}) : helper))) != null ? stack1 : "")
@@ -15166,39 +15209,45 @@ var templates = [
     + "')\n	}\n}\n\n";
 },"useData":true}],
 ["stanza_gene.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT distinct\n	?id\n	?name\n	(group_concat(distinct ?synonym;separator = \", \") AS ?synonym)\n	(group_concat(distinct ?url;separator = \"<br/>\") AS ?url)\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE {\n	?Resource dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":13,"column":31},"end":{"line":13,"column":37}}}) : helper))) != null ? stack1 : "")
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT distinct\n	?id\n	?name\n	(group_concat(distinct ?synonym;separator = \", \") AS ?synonym)\n	(group_concat(distinct ?url;separator = \"<br/>\") AS ?url)\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE {\n	?Resource dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":13,"column":31},"end":{"line":13,"column":37}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n		brso:genomic_feature _:b_genomic_feature .\n\n	_:b_genomic_feature a brso:GenomicFeature ;\n		brso:has_genomic_segment _:b_genomic_segment .\n\n	_:b_genomic_segment a brso:GenomicSegment ;\n		dcterms:identifier ?id ;\n		skos:altLabel ?synonym ;\n		rdfs:seeAlso ?url .\n\n	OPTIONAL{\n		_:b_genomic_segment rdfs:label ?name.\n	}\n}\n\n";
 },"useData":true}],
 ["stanza_image.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "PREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\n\nSELECT distinct\n	?image\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE {\n	?Resource dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":8,"column":31},"end":{"line":8,"column":37}}}) : helper))) != null ? stack1 : "")
+  return "PREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\n\nSELECT distinct\n	?image\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":6,"column":6},"end":{"line":6,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE {\n	?Resource dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":8,"column":31},"end":{"line":8,"column":37}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n		foaf:depiction ?image .\n}\n";
 },"useData":true}],
 ["stanza_larva.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE {\n	?Resource a brso:BiologicalResourceLarva ;\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE {\n	?Resource a brso:BiologicalResourceLarva ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n		rdfs:label ?name ;\n		brso:resource_state _:b_resource_state .\n\n	_:b_resource_state a brso:ResourceState ;\n		rdfs:label ?resource_state .\n}\nLIMIT 1\n";
 },"useData":true}],
 ["stanza_larval_period.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -15209,7 +15258,9 @@ var templates = [
         return undefined
     };
 
-  return "DEFINE sql:select-option \"order\"\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT distinct\n	?label\n	(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\n	(group_concat(distinct ?related_class;separator = \"<br/>\") AS ?related_class)\n	?description\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE {\n	?Resource a brso:BiologicalResourceLarva ;\n		dcterms:identifier \""
+  return "DEFINE sql:select-option \"order\"\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT distinct\n	?label\n	(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\n	(group_concat(distinct ?related_class;separator = \"<br/>\") AS ?related_class)\n	?description\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE {\n	?Resource a brso:BiologicalResourceLarva ;\n		dcterms:identifier \""
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":14,"column":22},"end":{"line":14,"column":28}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n		sio:SIO_001279 _:b_phenotype .\n\n	_:b_phenotype a sio:SIO_010056 ;\n		rdfs:label ?label_en ;\n		rdfs:label ?label .\n\n	filter(LANG(?label_en) = 'en')\n	?label_en bif:contains '\"instar period\" OR \"diapause period\"'.\n\n	filter(LANG(?label) = '"
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":24,"column":24},"end":{"line":24,"column":36}}}) : helper))) != null ? stack1 : "")
@@ -15225,7 +15276,11 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX bibo: <http://purl.org/ontology/bibo/>\nPREFIX obo: <http://purl.obolibrary.org/obo/>\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\n\nSELECT distinct\n	?label\n	?bmpo\n	?related_class\n	(group_concat(distinct ?reference;separator = \"<br/>\") AS ?reference)\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE{\n	{\n		SELECT distinct\n			?label\n			(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\n			(group_concat(distinct ?related_class;separator = \"<br/>\") AS ?related_class)\n			?puclication_name\n			?volume\n			?number\n			?starting_page\n			?ending_page\n			?date\n			?url\n			(group_concat(distinct ?author_name;separator = \", \" ) AS ?author_name)\n		FROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\n		WHERE {\n			?Resource dcterms:identifier \""
+  return "PREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX bibo: <http://purl.org/ontology/bibo/>\nPREFIX obo: <http://purl.obolibrary.org/obo/>\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\n\nSELECT distinct\n	?label\n	?bmpo\n	?related_class\n	(group_concat(distinct ?reference;separator = \"<br/>\") AS ?reference)\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":14,"column":6},"end":{"line":14,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE{\n	{\n		SELECT distinct\n			?label\n			(group_concat(distinct ?bmpo;separator = \"<br/>\") AS ?bmpo)\n			(group_concat(distinct ?related_class;separator = \"<br/>\") AS ?related_class)\n			?puclication_name\n			?volume\n			?number\n			?starting_page\n			?ending_page\n			?date\n			?url\n			(group_concat(distinct ?author_name;separator = \", \" ) AS ?author_name)\n		FROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":29,"column":8},"end":{"line":29,"column":17}}}) : helper))) != null ? stack1 : "")
+    + ">\n		WHERE {\n			?Resource dcterms:identifier \""
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":31,"column":33},"end":{"line":31,"column":39}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n				sio:SIO_001279 _:b_phenotype .\n			_:b_phenotype a sio:SIO_010056 ;\n				rdfs:label ?label .\n			filter(LANG(?label) = '')\n\n			OPTIONAL{\n				_:b_phenotype sio:SIO_000255 ?bmpo.\n			}\n			OPTIONAL{\n				_:b_phenotype rdfs:seeAlso ?related_class.\n			}\n			OPTIONAL{\n				_:b_phenotype dcterms:reference _:b_reference .\n\n				_:b_reference a bibo:Article ;\n					prism:publicationName ?puclication_name ;\n					prism:volume ?volume ;\n					prism:number ?number ;\n					prism:startingPage ?starting_page ;\n					prism:endingPage ?ending_page ;\n					dcterms:date ?date ;\n					rdfs:seeAlso ?url .\n				filter(LANG(?puclication_name) = '"
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":54,"column":38},"end":{"line":54,"column":50}}}) : helper))) != null ? stack1 : "")
@@ -15234,15 +15289,17 @@ var templates = [
     + "')\n				}\n			}\n\n		}\n	}\n\n	# author_name が empty の場合 \"-\" とする\n	BIND(BOUND(?author_name) && strlen(?author_name) >0 as ?an_notEmpty)\n	BIND( if (?an_notEmpty,\n			?author_name,\n			\"-\")\n		 as ?author_name )\n\n	# date が empty の場合 \"-\" とする\n	BIND(BOUND(?date) && strlen(?date) >0 as ?dt_notEmpty)\n	BIND( if (?dt_notEmpty,\n			?date,\n			\"-\")\n		 as ?date )\n\n	# puclication_name が empty でない場合、文字連結して reference を作成\n	BIND(BOUND(?puclication_name) && strlen(?puclication_name) >0 as ?pn_notEmpty)\n	BIND( if (?pn_notEmpty,\n			CONCAT( ?author_name, \", \", \" (\",\n				?date,\n				\"). \",\n				?puclication_name,\n				\", \",\n				?volume,\n				\", \",\n				?number,\n				\", [\",\n				?starting_page,\n				\"-\",\n				?ending_page,\n				\"]. \",\n				\"<a href='\",\n				?url,\n				\"'>\",\n				?url,\n				\"</a>\"\n				),\n			\"\")\n		 as ?reference )\n}\n";
 },"useData":true}],
 ["stanza_pupa.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE {\n	?Resource a brso:BiologicalResourcePupa ;\n		dcterms:identifier \""
-    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\n\nSELECT\n	?name\n	?resource_state\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE {\n	?Resource a brso:BiologicalResourcePupa ;\n		dcterms:identifier \""
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":28}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n		rdfs:label ?name ;\n		brso:resource_state _:b_resource_state .\n\n	_:b_resource_state a brso:ResourceState ;\n		rdfs:label ?resource_state .\n}\nLIMIT 1\n";
 },"useData":true}],
 ["stanza_reference.rq.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -15253,7 +15310,9 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX bibo: <http://purl.org/ontology/bibo/>\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\n\n\nSELECT distinct\n	?puclication_name\n	?volume\n	?number\n	?starting_page\n	?ending_page\n	?date\n	?url\n	(group_concat(distinct ?author_name;separator = \", \") AS ?author_name)\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE {\n	?Resource a brso:BiologicalResource ;\n		dcterms:identifier \""
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX bibo: <http://purl.org/ontology/bibo/>\nPREFIX prism: <http://prismstandard.org/namespaces/basic/2.0/>\n\n\nSELECT distinct\n	?puclication_name\n	?volume\n	?number\n	?starting_page\n	?ending_page\n	?date\n	?url\n	(group_concat(distinct ?author_name;separator = \", \") AS ?author_name)\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":18,"column":6},"end":{"line":18,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE {\n	?Resource a brso:BiologicalResource ;\n		dcterms:identifier \""
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":21,"column":22},"end":{"line":21,"column":28}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n		dcterms:reference _:b_reference .\n\n	_:b_reference a bibo:Article ;\n		prism:publicationName ?puclication_name ;\n		prism:volume ?volume ;\n		prism:number ?number ;\n		prism:startingPage ?starting_page ;\n		prism:endingPage ?ending_page ;\n		dcterms:date ?date ;\n		rdfs:seeAlso ?url .\n	filter(LANG(?puclication_name) = '"
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":32,"column":35},"end":{"line":32,"column":47}}}) : helper))) != null ? stack1 : "")
@@ -15269,7 +15328,9 @@ var templates = [
         return undefined
     };
 
-  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX obo: <http://purl.obolibrary.org/obo/>\n\nSELECT\n	?strain\n	?taxonomy_id\n	?description\n	(group_concat(distinct ?origin;separator = \", \") AS ?origin)\n	(group_concat(distinct ?journal;separator = \"<br/>\") AS ?journal)\n	?homepage\nFROM <http://iruddat2.nig.ac.jp:8120/silkworm_v4_0_0>\nWHERE {\n	?Resource a brso:BiologicalResource ;\n		dcterms:identifier \""
+  return "PREFIX brso: <http://purl.jp/bio/10/brso/>\nPREFIX sio: <http://semanticscience.org/resource/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dcterms: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX obo: <http://purl.obolibrary.org/obo/>\n\nSELECT\n	?strain\n	?taxonomy_id\n	?description\n	(group_concat(distinct ?origin;separator = \", \") AS ?origin)\n	(group_concat(distinct ?journal;separator = \"<br/>\") AS ?journal)\n	?homepage\nFROM <"
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"graph") || (depth0 != null ? lookupProperty(depth0,"graph") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"graph","hash":{},"data":data,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":15}}}) : helper))) != null ? stack1 : "")
+    + ">\nWHERE {\n	?Resource a brso:BiologicalResource ;\n		dcterms:identifier \""
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"id") || (depth0 != null ? lookupProperty(depth0,"id") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":18,"column":22},"end":{"line":18,"column":28}}}) : helper))) != null ? stack1 : "")
     + "\"^^<http://www.w3.org/2001/XMLSchema#string> ;\n		rdfs:label ?strain ;\n		brso:organism _:b_organism ;\n		dcterms:description ?description ;\n		foaf:homepage ?homepage .\n	filter(LANG(?description) = '"
     + ((stack1 = ((helper = (helper = lookupProperty(helpers,"language") || (depth0 != null ? lookupProperty(depth0,"language") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"language","hash":{},"data":data,"loc":{"start":{"line":23,"column":30},"end":{"line":23,"column":42}}}) : helper))) != null ? stack1 : "")

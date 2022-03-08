@@ -9416,7 +9416,7 @@ var css = "@charset \"UTF-8\";\n/*!\n * Bootstrap v5.1.1 (https://getbootstrap.c
 n(css,{});
 
 var name = "silkworm_details_search.stanza";
-var version = "0.0.1";
+var version = "1.0.0";
 var license = "MIT";
 var repository = "https://github.com/holshigen/silkworm_details_search.stanza";
 var dependencies = {
@@ -9496,4 +9496,4 @@ script.render = render;
 script.__file = "node_modules/togostanza/src/components/Layout.vue";
 
 export { Fragment as F, createElementBlock as a, renderList as b, createBlock as c, defineComponent as d, createBaseVNode as e, createCommentVNode as f, createApp as g, computed as h, createTextVNode as i, ref as j, octicons as k, createVNode as l, mergeProps as m, normalizeClass as n, openBlock as o, normalizeProps as p, guardReactiveProps as q, resolveComponent as r, script as s, toDisplayString as t, resolveDynamicComponent as u, pushScopeId as v, withCtx as w, popScopeId as x, n as y };
-//# sourceMappingURL=Layout-66304d4d.js.map
+//# sourceMappingURL=Layout-df1db94b.js.map
