@@ -14058,7 +14058,7 @@ var config = {
 };
 
 const environment = "production";
-process.env.ENDPOINT;
+env.ENDPOINT;
 
 class SilkwormDetailsSearch extends Stanza {
 
